@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rhyming Words Starter - KG1</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            touch-action: manipulation;
+            background-color: #eaf3db; /* Light pastel green */
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            cursor: crosshair;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform: translateX(50px) scale(0.95);
+            padding: 1.5rem;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0) scale(1);
+            z-index: 20;
+        }
+        .slide.previous {
+            transform: translateX(-50px) scale(0.95);
+        }
+
+        .pdf-theme-card {
+            background-color: #ffffff;
+            border: 8px dashed #86efac;
+            border-radius: 40px;
+            width: 100%;
+            max-width: 1000px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            padding: 2rem;
+            text-align: center;
+            overflow: hidden; /* For floating elements */
+        }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes bounce-in { 0% { transform: scale(0.1); opacity: 0; } 60% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); } }
+        @keyframes pulse-glow { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes happy-jump { 0%, 100% { transform: translateY(0) scale(1); } 30% { transform: translateY(-30px) scale(1.1) rotate(10deg); } 50% { transform: translateY(-40px) scale(1.1) rotate(-10deg); } 70% { transform: translateY(-10px) scale(1.05) rotate(5deg); } }
+        @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes slide-up-fade { 0% { transform: translateY(50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+        @keyframes wiggle { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); } }
+        @keyframes drift { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 10% { opacity: 0.6; } 90% { opacity: 0.6; } 100% { transform: translateY(-100px) rotate(20deg); opacity: 0; } }
+
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        .animate-bounce-in { animation: bounce-in 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; }
+        .animate-pulse-glow { animation: pulse-glow 2s infinite; }
+        .animate-happy-jump { animation: happy-jump 1s cubic-bezier(0.28, 0.84, 0.42, 1); }
+        .animate-breathe { animation: breathe 3s ease-in-out infinite; }
+        .animate-slide-up { animation: slide-up-fade 0.5s ease-out both; }
+        
+        .wiggle-container { transition: transform 0.2s ease; }
+        .wiggle-container:hover { transform: scale(1.05); }
+        .wiggle-container:hover .hover-wiggle { animation: wiggle 0.5s ease-in-out infinite; }
+
+        .solid-btn {
+            background-color: #3b82f6;
+            color: white;
+            border-radius: 20px;
+            border-bottom: 8px solid #2563eb;
+            transition: all 0.1s ease-in-out;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .solid-btn:active {
+            transform: translateY(8px);
+            border-bottom: 0px solid #2563eb;
+            margin-bottom: 8px;
+        }
+
+        .game-card { 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            cursor: pointer; 
+            border-radius: 24px;
+            border-bottom-width: 8px;
+        }
+        .game-card:active { transform: translateY(8px) scale(0.95) !important; border-bottom-width: 0px !important; margin-bottom: 8px; }
+        
+        .sparkle { position: absolute; pointer-events: none; width: 15px; height: 15px; border-radius: 50%; z-index: 9999; animation: sparkle-zoom 0.8s ease-out forwards; }
+        @keyframes sparkle-zoom { 0% { opacity: 1; transform: translate(-50%, -50%) scale(0.2); } 50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.5); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(3.5); } }
+        
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
+        .animate-shake { animation: shake 0.4s ease-in-out; }
+        
+        .mini-star { position: absolute; pointer-events: none; font-size: 20px; z-index: 100; animation: star-burst 0.8s ease-out forwards; }
+        @keyframes star-burst { 0% { transform: translate(0, 0) scale(0.5); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(1.5); opacity: 0; } }
+
+        .ppt-btn {
+            position: fixed; top: 50%; transform: translateY(-50%); z-index: 1000;
+            background: #4ade80; border-radius: 50%; width: 55px; height: 55px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; cursor: pointer; color: white;
+            border-bottom: 5px solid #16a34a; transition: all 0.1s;
+        }
+        .ppt-btn:active { transform: translateY(calc(-50% + 5px)); border-bottom-width: 0px; }
+        #prev-btn { left: 10px; md:left: 20px; }
+        #next-btn { right: 10px; md:right: 20px; }
+        #slide-dots { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 1000; flex-wrap: wrap; justify-content: center; width: 90%; }
+        .slide-dot { width: 14px; height: 14px; border-radius: 50%; background: #bbf7d0; cursor: pointer; transition: all 0.3s; border: 2px solid #86efac; }
+        .slide-dot.active { background: #22c55e; transform: scale(1.3); border-color: white; }
+
+        .scatter-card { position: absolute; padding: 10px 20px; background: white; border-radius: 15px; border-bottom: 6px solid #94a3b8; font-size: 2rem; border: 3px solid #cbd5e1; cursor: pointer; transition: transform 0.2s; }
+        .scatter-card:hover { transform: scale(1.1) rotate(0deg) !important; z-index: 10; }
+        
+        .ambient-balloon { position: absolute; font-size: 3rem; z-index: 1; opacity: 0; pointer-events: none; animation: drift 15s linear infinite; }
+    </style>
+</head>
+<body>
+
+    <button id="prev-btn" class="ppt-btn" onclick="prevSlide()" style="display: none;" aria-label="Previous Slide">◀</button>
+    <button id="next-btn" class="ppt-btn" onclick="nextSlide()" aria-label="Next Slide">▶</button>
+    <div id="slide-dots"></div>
+    
+    <!-- Ambient floating background elements -->
+    <div class="ambient-balloon" style="left: 10%; animation-delay: 0s;">🎈</div>
+    <div class="ambient-balloon" style="left: 30%; animation-delay: 7s; font-size: 2rem;">☁️</div>
+    <div class="ambient-balloon" style="left: 70%; animation-delay: 3s;">🎈</div>
+    <div class="ambient-balloon" style="left: 85%; animation-delay: 11s; font-size: 2.5rem;">☁️</div>
+
+    <div id="presentation-container" class="w-full h-full flex items-center justify-center relative">
+        
+        <div class="slide active" id="slide-0">
+            <div class="pdf-theme-card border-blue-400">
+                <h2 class="text-3xl md:text-4xl font-bold text-yellow-800 mb-8 uppercase tracking-widest bg-yellow-200 px-8 py-3 rounded-full border-4 border-yellow-400 drop-shadow-sm">Starter</h2>
+                <div class="flex items-center gap-4 mb-4">
+                    <span class="text-6xl md:text-8xl animate-bounce-in">🌟</span>
+                    <h1 class="text-5xl md:text-7xl font-black text-sky-500 tracking-wide uppercase drop-shadow-sm">Rhyming Words</h1>
+                    <span class="text-6xl md:text-8xl animate-bounce-in" style="animation-delay: 0.2s;">🌟</span>
+                </div>
+                <p class="text-2xl md:text-3xl text-gray-500 font-bold mt-8">By Christeena John</p>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-1">
+            <div class="pdf-theme-card border-green-400">
+                <div class="flex flex-col items-center gap-4 mb-10 w-full">
+                    <h2 class="text-4xl md:text-5xl font-black text-gray-800 uppercase tracking-wide flex items-center gap-4">
+                        <span class="text-6xl animate-happy-jump">🎯</span> Learning Objective
+                    </h2>
+                </div>
+                <div class="bg-green-50 p-8 rounded-3xl w-full max-w-2xl border-4 border-green-300 shadow-sm relative">
+                    <span class="text-6xl absolute -top-8 -right-8 animate-float">🔎</span>
+                    <h3 class="text-3xl md:text-4xl font-black text-green-700 mb-6">Today I can…</h3>
+                    <p class="text-3xl md:text-4xl font-bold text-gray-800 leading-tight">Find words that sound alike at the end.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-2">
+            <div class="pdf-theme-card border-pink-400 p-4 md:p-8">
+                <div class="bg-pink-100 px-6 py-3 rounded-full border-4 border-pink-300 mb-6 inline-block">
+                    <h2 class="text-2xl md:text-3xl font-black text-pink-600 uppercase flex items-center gap-2">🎟️ Entry Ticket: "Find My Friend"</h2>
+                </div>
+
+                <div class="w-full flex flex-col gap-6 items-center">
+                    <!-- Q1 -->
+                    <div class="bg-gray-50 p-6 rounded-3xl w-full border-4 border-gray-200">
+                        <p class="text-2xl font-bold text-gray-600 mb-4">"Which word sounds like CAR?"</p>
+                        <div class="flex flex-wrap justify-center items-center gap-4">
+                            <div class="bg-blue-100 px-6 py-3 rounded-2xl border-4 border-blue-300 text-center animate-pulse-glow flex flex-col items-center">
+                                <span class="text-5xl mb-2">🚗</span><span class="text-2xl font-black text-blue-800">CAR</span>
+                            </div>
+                            <span class="text-4xl font-black text-gray-300 hidden md:block">|</span>
+                            
+                            <div class="bg-white px-6 py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:border-pink-400 hover:scale-105 transition-all wiggle-container flex flex-col items-center">
+                                <span class="text-5xl mb-2 hover-wiggle">🐶</span><span class="text-xl font-bold">DOG</span>
+                            </div>
+                            <div class="bg-white px-6 py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:border-green-400 hover:bg-green-50 hover:scale-105 transition-all wiggle-container flex flex-col items-center" onclick="playSuccessSound(); confetti({particleCount: 50, spread: 60, zIndex: 1000});">
+                                <span class="text-5xl mb-2 hover-wiggle">🌟</span><span class="text-xl font-bold text-green-600">STAR</span>
+                            </div>
+                            <div class="bg-white px-6 py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:border-pink-400 hover:scale-105 transition-all wiggle-container flex flex-col items-center">
+                                <span class="text-5xl mb-2 hover-wiggle">🧹</span><span class="text-xl font-bold">MOP</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="bg-gray-50 p-6 rounded-3xl w-full border-4 border-gray-200">
+                        <p class="text-2xl font-bold text-gray-600 mb-4">"Which word sounds like FISH?"</p>
+                        <div class="flex flex-wrap justify-center items-center gap-4">
+                            <div class="bg-blue-100 px-6 py-3 rounded-2xl border-4 border-blue-300 text-center animate-pulse-glow flex flex-col items-center">
+                                <span class="text-5xl mb-2">🐟</span><span class="text-2xl font-black text-blue-800">FISH</span>
+                            </div>
+                            <span class="text-4xl font-black text-gray-300 hidden md:block">|</span>
+                            
+                            <div class="bg-white px-6 py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:border-pink-400 hover:scale-105 transition-all wiggle-container flex flex-col items-center">
+                                <span class="text-5xl mb-2 hover-wiggle">🐝</span><span class="text-xl font-bold">BEE</span>
+                            </div>
+                            <div class="bg-white px-6 py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:border-green-400 hover:bg-green-50 hover:scale-105 transition-all wiggle-container flex flex-col items-center" onclick="playSuccessSound(); confetti({particleCount: 50, spread: 60, zIndex: 1000});">
+                                <span class="text-5xl mb-2 hover-wiggle">🍽️</span><span class="text-xl font-bold text-green-600">DISH</span>
+                            </div>
+                            <div class="bg-white px-6 py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:border-pink-400 hover:scale-105 transition-all wiggle-container flex flex-col items-center">
+                                <span class="text-5xl mb-2 hover-wiggle">🧹</span><span class="text-xl font-bold">MOP</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-3">
+            <div class="pdf-theme-card border-purple-400 overflow-hidden relative">
+                <div class="bg-purple-100 px-8 py-4 rounded-full border-4 border-purple-300 absolute top-6 z-50 shadow-sm">
+                    <h2 class="text-3xl md:text-4xl font-black text-purple-700 uppercase">🧩 Hands-on: Find Your Word Friend!</h2>
+                </div>
+                
+                <div class="w-full h-full mt-24 relative">
+                    <!-- Mixed cards -->
+                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 15%; left: 10%; transform: rotate(-8deg);"><span class="text-6xl">🐱</span> <b>CAT</b></div>
+                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 25%; left: 65%; transform: rotate(12deg);"><span class="text-6xl">🎩</span> <b>HAT</b></div>
+                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 55%; left: 15%; transform: rotate(-5deg);"><span class="text-6xl">🐶</span> <b>DOG</b></div>
+                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 15%; left: 40%; transform: rotate(8deg);"><span class="text-6xl">🪵</span> <b>LOG</b></div>
+                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 65%; left: 65%; transform: rotate(-10deg);"><span class="text-6xl">🐝</span> <b>BEE</b></div>
+                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 45%; left: 40%; transform: rotate(5deg);"><span class="text-6xl">🌳</span> <b>TREE</b></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-4">
+            <div class="pdf-theme-card border-yellow-400">
+                <h2 class="text-4xl md:text-5xl font-black text-yellow-600 mb-8 bg-yellow-50 px-8 py-4 rounded-full border-4 border-yellow-300">🎵 "Cat, Cat, Wear a Hat!"</h2>
+                
+                <div class="space-y-4 text-center text-3xl md:text-4xl font-bold text-gray-800 leading-relaxed w-full max-w-2xl">
+                    <div class="bg-gray-50 p-4 rounded-2xl border-2 border-gray-200 hover:scale-105 transition-transform hover:bg-blue-50 cursor-default">Cat, cat, wear a hat, 🐱🎩</div>
+                    <div class="bg-gray-50 p-4 rounded-2xl border-2 border-gray-200 hover:scale-105 transition-transform hover:bg-green-50 cursor-default">Dog, dog, sit on a log, 🐶🪵</div>
+                    <div class="bg-gray-50 p-4 rounded-2xl border-2 border-gray-200 hover:scale-105 transition-transform hover:bg-pink-50 cursor-default">Bee, bee, climb a tree, 🐝🌳</div>
+                    <div class="bg-yellow-100 p-4 rounded-2xl border-4 border-yellow-300 hover:scale-105 transition-transform text-yellow-800 animate-pulse-glow">Sun, sun, have some fun! ☀️🎉</div>
+                </div>
+                <p class="mt-8 text-xl text-gray-400 italic font-bold">*(Tune: Twinkle, Twinkle, Little Star)*</p>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-5">
+            <div class="pdf-theme-card border-red-500">
+                <h2 class="text-3xl md:text-4xl font-black text-gray-800 mb-6 uppercase flex items-center gap-3">🇦🇪 UAE Connection: "Look Around Our UAE!"</h2>
+                
+                <div class="flex flex-col items-center justify-center w-full max-w-3xl flex-grow relative">
+                    
+                    <!-- Interactive Button to reveal -->
+                    <button id="uae-reveal-btn" onclick="revealUaeContent()" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 solid-btn bg-amber-500 border-amber-700 text-2xl font-black py-4 px-8 animate-pulse-glow">
+                        Tap to Explore! 🔍
+                    </button>
+
+                    <!-- The Flag (Always visible initially) -->
+                    <div class="text-[8rem] md:text-[10rem] drop-shadow-xl animate-float z-20" id="uae-flag-icon">🇦🇪</div>
+                    
+                    <!-- Hidden Content Container -->
+                    <div id="uae-hidden-content" class="w-full flex flex-col items-center opacity-0 transition-opacity duration-1000 mt-4 h-0 overflow-hidden">
+                        <h2 class="text-6xl md:text-7xl font-black text-black tracking-widest bg-red-100 px-10 py-2 rounded-2xl border-4 border-red-300 mb-8 inline-block shadow-sm">FLAG</h2>
+                        
+                        <p class="text-xl md:text-2xl font-bold text-gray-600 mb-6 text-center max-w-xl">Can you come up with words that end with the same sound as that of flag?</p>
+                        
+                        <div class="flex flex-wrap justify-center gap-6">
+                            <div class="bg-white px-6 py-4 rounded-2xl text-4xl font-black border-4 border-blue-400 shadow-[0_6px_0_#60a5fa] hover:translate-y-1 hover:shadow-[0_2px_0_#60a5fa] transition-all cursor-pointer flex flex-col items-center gap-2"><span>🎒</span>BAG</div>
+                            <div class="bg-white px-6 py-4 rounded-2xl text-4xl font-black border-4 border-yellow-400 shadow-[0_6px_0_#facc15] hover:translate-y-1 hover:shadow-[0_2px_0_#facc15] transition-all cursor-pointer flex flex-col items-center gap-2"><span>🏷️</span>TAG</div>
+                            <div class="bg-white px-6 py-4 rounded-2xl text-4xl font-black border-4 border-green-400 shadow-[0_6px_0_#4ade80] hover:translate-y-1 hover:shadow-[0_2px_0_#4ade80] transition-all cursor-pointer flex flex-col items-center gap-2"><span>🧻</span>RAG</div>
+                            <div class="bg-white px-6 py-4 rounded-2xl text-4xl font-black border-4 border-pink-400 shadow-[0_6px_0_#f472b6] hover:translate-y-1 hover:shadow-[0_2px_0_#f472b6] transition-all cursor-pointer flex flex-col items-center gap-2"><span>🐕</span>WAG</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide p-0 md:p-4" id="slide-6">
+            <div class="pdf-theme-card border-blue-500 overflow-hidden !p-0">
+                
+                <div class="absolute top-4 left-4 bg-white px-4 py-2 rounded-full font-bold text-blue-600 shadow-md z-30 hidden md:flex items-center gap-2 border-2 border-blue-200">
+                    💻 Online Game: "Choose the Word Friend"
+                </div>
+
+                <!-- Game Start Screen -->
+                <div id="game-start-screen" class="flex flex-col items-center justify-center w-full h-full absolute z-20 bg-white transition-opacity duration-500">
+                    <div class="text-7xl md:text-9xl mb-6 animate-breathe drop-shadow-md">🌟</div>
+                    <h1 class="text-4xl md:text-5xl font-black text-blue-600 mb-8 uppercase tracking-wide text-center px-4">Choose the Word Friend!</h1>
+                    <button id="start-game-btn" class="solid-btn bg-amber-500 border-amber-700 text-2xl md:text-3xl font-black py-4 md:py-6 px-10 md:px-14 hover:scale-105 hover:bg-amber-400">
+                        PLAY GAME ▶️
+                    </button>
+                    <p class="mt-8 text-gray-400 font-bold max-w-md text-center px-4">"I am going to choose one helper. Can you help us find the correct answer?"</p>
+                </div>
+
+                <!-- Game UI Core -->
+                <div id="game-ui-container" class="w-full h-full flex flex-col hidden p-4 md:p-8 bg-blue-50 rounded-[32px]">
+                    
+                    <!-- Progress Bar -->
+                    <div class="flex justify-between items-center w-full mb-4 z-10 bg-white p-3 rounded-full shadow-sm border-2 border-blue-100">
+                        <div class="flex items-center gap-2 font-black text-blue-600 px-2">
+                            <span class="text-2xl">🏆</span> Match <span id="current-round-display">1</span>/3
+                        </div>
+                        <div id="progress-dots" class="flex gap-3 px-2"></div>
+                    </div>
+
+                    <!-- Target Area -->
+                    <div class="flex-grow flex flex-col items-center justify-start w-full relative mt-4">
+                        <div class="w-full flex justify-center mb-8 z-20">
+                            <div id="target-container" class="bg-white border-4 border-dashed border-gray-400 rounded-3xl p-6 flex flex-col items-center justify-center min-w-[200px] shadow-sm relative">
+                                <span class="absolute -top-4 bg-gray-600 text-white px-4 py-1 rounded-full font-bold text-sm uppercase tracking-wider shadow-sm">Target Word</span>
+                                <div id="target-icon" class="text-7xl md:text-8xl drop-shadow-sm mb-2 mt-2">❓</div>
+                                <div id="target-word" class="text-4xl font-black text-gray-800 tracking-wide uppercase">???</div>
+                            </div>
+                        </div>
+
+                        <!-- Options Container -->
+                        <p class="text-xl font-bold text-gray-500 mb-4 uppercase tracking-widest bg-white/50 px-4 py-1 rounded-full">Which one is the word friend?</p>
+                        <div id="options-container" class="flex flex-col md:flex-row gap-4 md:gap-8 w-full z-20 max-w-4xl mx-auto items-center justify-center">
+                            <!-- Option cards injected via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game End Screen -->
+                <div id="game-end-screen" class="flex flex-col items-center justify-center w-full h-full absolute z-20 bg-white hidden">
+                    <h1 class="text-5xl md:text-6xl font-black text-green-500 mb-6 uppercase drop-shadow-sm">Amazing Job!</h1>
+                    <div class="text-8xl md:text-9xl mb-10 animate-happy-jump drop-shadow-xl">🥇</div>
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <button onclick="playPopSound(); initGame();" class="solid-btn bg-amber-500 border-amber-700 text-xl md:text-2xl font-black py-4 px-8 md:px-10 hover:scale-105 hover:bg-amber-400">
+                            🔄 REPLAY GAME
+                        </button>
+                        <button onclick="nextSlide()" class="solid-btn bg-green-500 border-green-700 text-xl md:text-2xl font-black py-4 px-8 md:px-10 hover:scale-105">
+                            NEXT SLIDE ➡️
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-7">
+            <div class="pdf-theme-card border-purple-400">
+                <h2 class="text-4xl md:text-5xl font-black text-purple-700 mb-10 bg-purple-100 px-8 py-3 rounded-full border-4 border-purple-300 shadow-sm flex items-center gap-4">
+                    <span class="text-5xl">👂</span> What Did You Notice?
+                </h2>
+
+                <div class="flex flex-col gap-6 mb-10 text-3xl md:text-4xl font-bold text-gray-700 w-full max-w-2xl">
+                    <div class="flex justify-center items-center bg-gray-50 px-8 py-4 rounded-2xl border-4 border-gray-200 gap-8">
+                        <span class="flex items-center gap-2">🌙 MOON</span> <span class="text-gray-300">——</span> <span class="flex items-center gap-2">🥄 SPOON</span>
+                    </div>
+                    <div class="flex justify-center items-center bg-gray-50 px-8 py-4 rounded-2xl border-4 border-gray-200 gap-8">
+                        <span class="flex items-center gap-2">🦊 FOX</span> <span class="text-gray-300">——</span> <span class="flex items-center gap-2">📦 BOX</span>
+                    </div>
+                    <div class="flex justify-center items-center bg-gray-50 px-8 py-4 rounded-2xl border-4 border-gray-200 gap-8">
+                        <span class="flex items-center gap-2">🚗 CAR</span> <span class="text-gray-300">——</span> <span class="flex items-center gap-2">🫙 JAR</span>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-100 p-6 rounded-3xl border-4 border-yellow-300 animate-pulse-glow w-full max-w-2xl shadow-sm">
+                    <h3 class="text-2xl md:text-3xl font-black text-yellow-800 mb-2">🤔 "What do you notice?"</h3>
+                    <h3 class="text-2xl md:text-3xl font-black text-yellow-800">"What happens at the end of these words?"</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-8">
+            <div class="pdf-theme-card border-pink-400 justify-center">
+                
+                <!-- Decorative background elements -->
+                <div class="absolute -top-10 -left-10 text-[8rem] opacity-20 transform -rotate-12 pointer-events-none">🌈</div>
+                <div class="absolute -bottom-10 -right-10 text-[8rem] opacity-20 transform rotate-12 pointer-events-none">🌟</div>
+
+                <h1 class="text-6xl md:text-8xl font-black text-sky-500 mb-8 uppercase drop-shadow-sm animate-bounce-in flex items-center gap-4">
+                    RHYMING WORDS <span class="text-6xl">🌈</span>
+                </h1>
+                
+                <div class="bg-white p-8 rounded-3xl border-4 border-dashed border-gray-300 mb-10 w-full max-w-3xl shadow-sm relative z-10">
+                    <p class="text-3xl md:text-4xl font-bold text-gray-700 leading-relaxed">
+                        Words that sound alike at the end are called <br><span class="text-pink-600 text-5xl font-black block mt-4 bg-pink-50 inline-block px-6 py-2 rounded-full border-2 border-pink-200">rhyming words.</span>
+                    </p>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-center justify-center gap-6 mb-12 text-4xl md:text-5xl font-black text-gray-800 bg-gray-50 p-6 rounded-3xl border-4 border-gray-200 z-10 w-full max-w-3xl">
+                    <span class="bg-white px-8 py-4 rounded-2xl border-4 border-gray-300 flex flex-col items-center gap-2"><span class="text-6xl">🐱</span> CAT</span>
+                    <span class="text-gray-300 text-6xl rotate-90 md:rotate-0">➡️</span>
+                    <span class="bg-white px-8 py-4 rounded-2xl border-4 border-gray-300 flex flex-col items-center gap-2"><span class="text-6xl">🎩</span> HAT</span>
+                    <div class="w-full text-center mt-4 md:mt-0 md:ml-4">
+                        <span class="text-xl text-gray-500 block font-bold">"CAT and HAT are rhyming words."</span>
+                    </div>
+                </div>
+
+                <p class="text-2xl md:text-3xl font-bold text-blue-600 bg-blue-50 py-4 px-8 rounded-full border-4 border-blue-200 animate-pulse-glow z-10">
+                    "Now let's learn more about rhyming words!"
+                </p>
+                
+                <div class="absolute bottom-4 right-8 text-gray-400 font-bold flex items-center gap-2 animate-bounce">
+                    ➡️ Transition to Main Lesson
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const slideDotsContainer = document.getElementById('slide-dots');
+
+        // Initialize progress dots
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = `slide-dot ${i === 0 ? 'active' : ''}`;
+            dot.onclick = () => goToSlide(i);
+            slideDotsContainer.appendChild(dot);
+        });
+        const dots = document.querySelectorAll('.slide-dot');
+
+        function updateSlideClasses() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'previous');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else if (index < currentSlide) {
+                    slide.classList.add('previous');
+                }
+            });
+
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+
+            prevBtn.style.display = currentSlide === 0 ? 'none' : 'flex';
+            nextBtn.style.display = currentSlide === slides.length - 1 ? 'none' : 'flex';
+
+            // Retrigger entrance animations on active slide
+            const activeSlide = slides[currentSlide];
+            const animatedElements = activeSlide.querySelectorAll('.animate-bounce-in, .animate-slide-up');
+            animatedElements.forEach(el => {
+                el.style.animation = 'none';
+                void el.offsetWidth; // trigger reflow
+                el.style.animation = null;
+            });
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlideClasses();
+                playPopSound(0.05);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlideClasses();
+                playPopSound(0.05);
+            }
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlideClasses();
+            playPopSound(0.05);
+        }
+
+        // Keyboard navigation bindings
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+        function revealUaeContent() {
+            const btn = document.getElementById('uae-reveal-btn');
+            const hiddenContent = document.getElementById('uae-hidden-content');
+            
+            playPopSound();
+            
+            // Hide button
+            btn.style.opacity = '0';
+            btn.style.pointerEvents = 'none';
+            setTimeout(() => btn.style.display = 'none', 300);
+
+            // Show content smoothly
+            hiddenContent.style.height = 'auto';
+            hiddenContent.style.opacity = '1';
+            
+            // Confetti burst for discovery
+            confetti({
+                particleCount: 80,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: ['#ef4444', '#16a34a', '#000000', '#ffffff'] // UAE flag colors roughly
+            });
+        }
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playTone(freq, type, duration, vol=0.1) {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.type = type;
+            oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + duration);
+        }
+
+        function playSuccessSound() {
+            playTone(523.25, 'sine', 0.2, 0.2); // C5
+            setTimeout(() => playTone(659.25, 'sine', 0.2, 0.2), 100); // E5
+            setTimeout(() => playTone(783.99, 'sine', 0.4, 0.2), 200); // G5
+        }
+
+        function playFailSound() {
+            // Low, descending plonk
+            playTone(300, 'triangle', 0.3, 0.2);
+            setTimeout(() => playTone(250, 'triangle', 0.4, 0.2), 150);
+        }
+
+        function playPopSound(vol=0.1) {
+            playTone(800, 'sine', 0.1, vol);
+        }
+
+        function playWinGameSound() {
+            playSuccessSound();
+            setTimeout(() => playSuccessSound(), 400);
+            setTimeout(() => playTone(1046.50, 'square', 0.6, 0.1), 800); // C6
+        }
+
+        // Dictionary exactly as requested in Slide 7 instructions
+        const gameLevels = [
+            { 
+                target: { w: "FAN", i: "🪭" },
+                correct: { w: "PAN", i: "🍳" },
+                wrong: [
+                    { w: "MOP", i: "🧹" }, 
+                    { w: "DOG", i: "🐶" }
+                ] 
+            },
+            { 
+                target: { w: "MOON", i: "🌙" }, 
+                correct: { w: "SPOON", i: "🥄" }, 
+                wrong: [
+                    { w: "FISH", i: "🐟" }, 
+                    { w: "CAR", i: "🚗" }
+                ] 
+            },
+            { 
+                target: { w: "FOX", i: "🦊" }, 
+                correct: { w: "BOX", i: "📦" }, 
+                wrong: [
+                    { w: "TREE", i: "🌳" }, 
+                    { w: "SHIP", i: "🚢" }
+                ] 
+            }
+        ];
+
+        let gameLevelIndex = 0;
+        const TOTAL_ROUNDS = gameLevels.length;
+        let isGameAnimating = false;
+
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function initGame() {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            gameLevelIndex = 0;
+            
+            // Setup Progress Dots UI
+            const progressContainer = document.getElementById('progress-dots');
+            progressContainer.innerHTML = '';
+            for(let i=0; i<TOTAL_ROUNDS; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'w-5 h-5 rounded-full bg-blue-100 border-2 border-white shadow-inner transition-colors duration-300';
+                dot.id = `game-dot-${i}`;
+                progressContainer.appendChild(dot);
+            }
+
+            // Screen transition
+            document.getElementById('game-start-screen').classList.add('hidden');
+            document.getElementById('game-end-screen').classList.add('hidden');
+            document.getElementById('game-ui-container').classList.remove('hidden');
+            
+            loadGameLevel();
+        }
+
+        function loadGameLevel() {
+            isGameAnimating = false;
+            const levelData = gameLevels[gameLevelIndex];
+            
+            // Update UI trackers
+            document.getElementById('current-round-display').textContent = gameLevelIndex + 1;
+
+            for(let i=0; i<TOTAL_ROUNDS; i++) {
+                const dot = document.getElementById(`game-dot-${i}`);
+                if (i < gameLevelIndex) {
+                    dot.className = 'w-5 h-5 rounded-full bg-green-400 border-2 border-white shadow-inner';
+                } else if (i === gameLevelIndex) {
+                    dot.className = 'w-5 h-5 rounded-full bg-amber-400 border-2 border-white shadow-inner animate-pulse';
+                } else {
+                    dot.className = 'w-5 h-5 rounded-full bg-blue-100 border-2 border-white shadow-inner';
+                }
+            }
+
+            // Animate target card entrance
+            const targetContainer = document.getElementById('target-container');
+            targetContainer.classList.remove('animate-bounce-in');
+            void targetContainer.offsetWidth;
+            targetContainer.classList.add('animate-bounce-in');
+
+            // Set Target Data
+            document.getElementById('target-icon').textContent = levelData.target.i;
+            document.getElementById('target-word').textContent = levelData.target.w;
+
+            // Prepare and Shuffle Options
+            const options = shuffle([levelData.correct, ...levelData.wrong]);
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            // Render Option Cards
+            options.forEach((opt, index) => {
+                const wrapper = document.createElement('div');
+                // Responsive layout: full width on mobile, flexible on desktop
+                wrapper.className = 'animate-slide-up w-full md:w-1/3 max-w-[280px] h-32 md:h-48 relative wiggle-container';
+                wrapper.style.animationDelay = `${index * 0.15}s`;
+
+                const btn = document.createElement('div');
+                const colors = [
+                    'border-pink-400 shadow-[0_8px_0_#f472b6]',
+                    'border-sky-400 shadow-[0_8px_0_#38bdf8]',
+                    'border-purple-400 shadow-[0_8px_0_#c084fc]'
+                ];
+                
+                // Solid, tappable card design
+                btn.className = `game-card bg-white border-4 rounded-2xl md:rounded-3xl p-3 md:p-4 flex flex-row md:flex-col items-center justify-center gap-4 h-full w-full hover-wiggle ${colors[index % colors.length]}`;
+                btn.innerHTML = `
+                    <div class="text-6xl md:text-7xl pointer-events-none drop-shadow-sm">${opt.i}</div>
+                    <div class="text-3xl font-black pointer-events-none uppercase text-gray-700">${opt.w}</div>
+                `;
+                
+                btn.onclick = () => handleGameAnswer(opt, levelData.correct, btn);
+                wrapper.appendChild(btn);
+                optionsContainer.appendChild(wrapper);
+            });
+        }
+
+        function createLocalBurst(element) {
+            const rect = element.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            for(let i = 0; i < 8; i++) {
+                const star = document.createElement('div');
+                star.textContent = "⭐";
+                star.className = 'mini-star';
+                star.style.left = centerX + 'px';
+                star.style.top = centerY + 'px';
+                const angle = (Math.PI * 2 / 8) * i;
+                const distance = 60 + Math.random() * 40;
+                star.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
+                star.style.setProperty('--ty', `${Math.sin(angle) * distance}px`);
+                document.body.appendChild(star);
+                setTimeout(() => star.remove(), 800);
+            }
+        }
+
+        function markWrongElement(element) {
+            element.style.pointerEvents = 'none'; // Prevent clicking again
+            
+            // Visual shake feedback
+            element.classList.add('animate-shake');
+            element.classList.remove('hover-wiggle'); // Disable wiggle on hover
+            
+            // Override styles to look disabled and incorrect
+            element.classList.remove('bg-white', 'border-pink-400', 'border-sky-400', 'border-purple-400');
+            element.classList.add('bg-red-50', 'border-red-400', 'relative');
+            element.style.boxShadow = 'none'; // Flatten the card
+            
+            // Dim existing content (icon and text)
+            Array.from(element.children).forEach(child => {
+                child.style.opacity = '0.3';
+                child.style.transition = 'opacity 0.3s ease';
+            });
+
+            // Add bouncing Cross Mark overlay
+            const cross = document.createElement('div');
+            cross.className = 'absolute inset-0 flex items-center justify-center text-7xl md:text-8xl z-50 animate-bounce-in drop-shadow-md';
+            cross.innerHTML = '❌';
+            element.appendChild(cross);
+        }
+
+        function handleGameAnswer(selected, correct, btnElement) {
+            if(isGameAnimating) return; // Prevent clicking while animating
+
+            if (selected.w === correct.w) {
+                // CORRECT LOGIC
+                isGameAnimating = true;
+                playSuccessSound();
+
+                // Stylize correct button
+                btnElement.className = `game-card border-4 border-green-500 rounded-2xl md:rounded-3xl p-3 md:p-4 flex flex-row md:flex-col items-center justify-center gap-4 h-full w-full bg-green-100 text-green-900 shadow-[0_0px_0_#22c55e]`;
+                btnElement.style.transform = 'scale(1.05) rotate(2deg)';
+                btnElement.style.zIndex = '50';
+
+                // Effects
+                createLocalBurst(btnElement);
+                confetti({ 
+                    particleCount: 150, 
+                    spread: 80, 
+                    origin: { y: 0.6 }, 
+                    zIndex: 10000,
+                    colors: ['#22c55e', '#facc15', '#3b82f6', '#f472b6']
+                });
+
+                // Advance Level
+                setTimeout(() => {
+                    gameLevelIndex++;
+                    if(gameLevelIndex < TOTAL_ROUNDS) {
+                        loadGameLevel();
+                    } else {
+                        endGame();
+                    }
+                }, 2000);
+
+            } else {
+                // INCORRECT LOGIC
+                playFailSound();
+                markWrongElement(btnElement);
+            }
+        }
+
+        function endGame() {
+            document.getElementById('game-ui-container').classList.add('hidden');
+            const endScreen = document.getElementById('game-end-screen');
+            endScreen.classList.remove('hidden');
+            playWinGameSound();
+            
+            // Continuous confetti for win screen
+            const duration = 3000;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, zIndex: 10000 });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, zIndex: 10000 });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+
+        // Bind Start Game Button
+        document.getElementById('start-game-btn').addEventListener('click', () => {
+            playPopSound();
+            initGame();
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            // Throttle generation slightly so it's not overwhelming, but frequent enough to make a trail
+            if(Math.random() > 0.4) return; 
+            
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            // Offset slightly so it drops from the tip of the cursor
+            sparkle.style.left = (e.pageX + 5) + 'px';
+            sparkle.style.top = (e.pageY + 5) + 'px';
+            
+            // Pastel/Gold color palette
+            const colors = ['#fde047', '#fef08a', '#ffedd5', '#fef3c7', '#ffffff'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            sparkle.style.backgroundColor = color;
+            sparkle.style.boxShadow = `0 0 10px ${color}, 0 0 20px white`;
+
+            document.body.appendChild(sparkle);
+            
+            // Remove from DOM after animation completes
+            setTimeout(() => sparkle.remove(), 800);
+        });
+
+    </script>
+</body>
+</html>
