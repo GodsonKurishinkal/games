@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Rhyming Words Starter - KG1</title>
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
-    
+
     <!-- Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -45,7 +45,7 @@
             visibility: hidden;
             transition: opacity 0.5s ease-in-out, transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
             transform: translateX(50px) scale(0.95);
-            padding: clamp(0.5rem, 3vw, 1.5rem);
+            padding: clamp(0.4rem, 2.2vmin, 1.5rem);
             box-sizing: border-box;
             z-index: 10;
         }
@@ -61,23 +61,26 @@
 
         .pdf-theme-card {
             background-color: #ffffff;
-            border: clamp(4px, 1.2vw, 8px) dashed #86efac;
-            border-radius: clamp(20px, 4vw, 40px);
+            border: clamp(3px, 0.8vmin, 8px) dashed #86efac;
+            border-radius: clamp(16px, 3vmin, 40px);
             width: 100%;
             max-width: 1050px;
             height: 100%;
-            max-height: 950px;
+            max-height: 900px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
             box-shadow: 0 20px 40px rgba(0,0,0,0.05);
-            padding: clamp(1rem, 4vw, 2.5rem);
+            padding: clamp(0.75rem, 2.6vmin, 2.5rem);
             text-align: center;
-            overflow: hidden; /* For floating elements */
+            overflow: hidden; /* For floating elements; scroll-content overrides when needed */
             box-sizing: border-box;
         }
+        /* Safety fallback only — sizing below is tuned to fit a laptop screen
+           (1280x720 and up, landscape) without needing this, but a very small
+           or unusual window can still scroll instead of clipping content. */
         .pdf-theme-card.scroll-content { overflow-y: auto; overflow-x: hidden; justify-content: safe center; }
 
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
@@ -95,7 +98,7 @@
         .animate-happy-jump { animation: happy-jump 1s cubic-bezier(0.28, 0.84, 0.42, 1); }
         .animate-breathe { animation: breathe 3s ease-in-out infinite; }
         .animate-slide-up { animation: slide-up-fade 0.5s ease-out both; }
-        
+
         .wiggle-container { transition: transform 0.2s ease; }
         .wiggle-container:hover { transform: scale(1.05); }
         .wiggle-container:hover .hover-wiggle { animation: wiggle 0.5s ease-in-out infinite; }
@@ -115,59 +118,63 @@
             margin-bottom: 8px;
         }
 
-        .game-card { 
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
-            cursor: pointer; 
+        .game-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
             border-radius: 24px;
             border-bottom-width: 8px;
         }
         .game-card:active { transform: translateY(8px) scale(0.95) !important; border-bottom-width: 0px !important; margin-bottom: 8px; }
-        
+
         .sparkle { position: absolute; pointer-events: none; width: 15px; height: 15px; border-radius: 50%; z-index: 9999; animation: sparkle-zoom 0.8s ease-out forwards; }
         @keyframes sparkle-zoom { 0% { opacity: 1; transform: translate(-50%, -50%) scale(0.2); } 50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.5); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(3.5); } }
-        
+
         @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
         .animate-shake { animation: shake 0.4s ease-in-out; }
-        
+
         .mini-star { position: absolute; pointer-events: none; font-size: 20px; z-index: 100; animation: star-burst 0.8s ease-out forwards; }
         @keyframes star-burst { 0% { transform: translate(0, 0) scale(0.5); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(1.5); opacity: 0; } }
 
         .ppt-btn {
             position: fixed; top: 50%; transform: translateY(-50%); z-index: 1000;
             background: #4ade80; border-radius: 50%;
-            width: clamp(38px, 9vw, 55px); height: clamp(38px, 9vw, 55px);
+            width: clamp(34px, 6vmin, 55px); height: clamp(34px, 6vmin, 55px);
             display: flex; align-items: center; justify-content: center;
-            font-size: clamp(15px, 4vw, 24px); cursor: pointer; color: white;
+            font-size: clamp(14px, 2.6vmin, 24px); cursor: pointer; color: white;
             border-bottom: 5px solid #16a34a; transition: all 0.1s;
         }
         .ppt-btn:active { transform: translateY(calc(-50% + 5px)); border-bottom-width: 0px; }
-        #prev-btn { left: clamp(6px, 2vw, 20px); }
-        #next-btn { right: clamp(6px, 2vw, 20px); }
-        #slide-dots { position: fixed; bottom: clamp(6px, 2vh, 15px); left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 1000; flex-wrap: wrap; justify-content: center; width: 90%; }
-        .slide-dot { width: clamp(9px, 2vw, 14px); height: clamp(9px, 2vw, 14px); border-radius: 50%; background: #bbf7d0; cursor: pointer; transition: all 0.3s; border: 2px solid #86efac; }
+        #prev-btn { left: clamp(4px, 1.2vmin, 20px); }
+        #next-btn { right: clamp(4px, 1.2vmin, 20px); }
+        #slide-dots { position: fixed; bottom: clamp(4px, 1.2vmin, 15px); left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 1000; flex-wrap: wrap; justify-content: center; width: 90%; }
+        .slide-dot { width: clamp(8px, 1.4vmin, 14px); height: clamp(8px, 1.4vmin, 14px); border-radius: 50%; background: #bbf7d0; cursor: pointer; transition: all 0.3s; border: 2px solid #86efac; }
         .slide-dot.active { background: #22c55e; transform: scale(1.3); border-color: white; }
 
-        .scatter-card { position: absolute; padding: clamp(6px, 1.5vw, 10px) clamp(10px, 3vw, 20px); background: white; border-radius: 15px; border-bottom: 6px solid #94a3b8; font-size: clamp(1.1rem, 4.5vw, 2rem); border: 3px solid #cbd5e1; cursor: pointer; transition: transform 0.2s; }
+        .scatter-card { position: absolute; padding: clamp(4px, 1vmin, 10px) clamp(8px, 2vmin, 20px); background: white; border-radius: 15px; border-bottom: 6px solid #94a3b8; font-size: clamp(0.9rem, 3.4vmin, 2rem); border: 3px solid #cbd5e1; cursor: pointer; transition: transform 0.2s; }
         .scatter-card:hover { transform: scale(1.1) rotate(0deg) !important; z-index: 10; }
 
-        .ambient-balloon { position: absolute; font-size: clamp(1.5rem, 5vw, 3rem); z-index: 1; opacity: 0; pointer-events: none; animation: drift 15s linear infinite; }
+        .ambient-balloon { position: absolute; font-size: clamp(1.2rem, 3.5vmin, 3rem); z-index: 1; opacity: 0; pointer-events: none; animation: drift 15s linear infinite; }
 
         /* Section badge used for consistent slide headers */
         .section-badge {
-            display: inline-flex; align-items: center; gap: 0.75rem;
+            display: inline-flex; align-items: center; gap: 0.6rem;
             border-radius: 9999px; border-width: 4px; border-style: solid;
-            padding: clamp(0.5rem, 1.5vw, 0.9rem) clamp(1.2rem, 3vw, 2rem);
+            padding: clamp(0.35rem, 1vmin, 0.9rem) clamp(0.9rem, 2.2vmin, 2rem);
             font-weight: 900; text-transform: uppercase; box-shadow: 0 2px 0 rgba(0,0,0,0.03);
         }
 
         /* Entry-ticket / answer feedback */
         .answer-correct { background-color: #dcfce7 !important; border-color: #22c55e !important; }
         .answer-wrong { background-color: #fee2e2 !important; border-color: #f87171 !important; }
-        .answer-mark { position: absolute; top: -14px; right: -14px; font-size: clamp(1.5rem, 5vw, 2.25rem); z-index: 30; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.15)); }
+        .answer-mark { position: absolute; top: -14px; right: -14px; font-size: clamp(1.2rem, 3.6vmin, 2.25rem); z-index: 30; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.15)); }
 
         /* Staggered word reveal (UAE slide) */
         .uae-word-item { opacity: 0; transform: translateY(18px) scale(0.7); transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .uae-word-item.show { opacity: 1; transform: translateY(0) scale(1); }
+
+        /* Emoji images: sized to the font-size of their containing element (1em),
+           so every existing text-size utility/clamp still controls their size. */
+        .emoji-icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.15em; object-fit: contain; }
 
         @media (max-width: 480px) {
             .pdf-theme-card { border-width: 5px; }
@@ -182,155 +189,160 @@
     <button id="prev-btn" class="ppt-btn" onclick="prevSlide()" style="display: none;" aria-label="Previous Slide">◀</button>
     <button id="next-btn" class="ppt-btn" onclick="nextSlide()" aria-label="Next Slide">▶</button>
     <div id="slide-dots"></div>
-    
+
     <!-- Ambient floating background elements -->
-    <div class="ambient-balloon" style="left: 10%; animation-delay: 0s;">🎈</div>
-    <div class="ambient-balloon" style="left: 30%; animation-delay: 7s; font-size: 2rem;">☁️</div>
-    <div class="ambient-balloon" style="left: 70%; animation-delay: 3s;">🎈</div>
-    <div class="ambient-balloon" style="left: 85%; animation-delay: 11s; font-size: 2.5rem;">☁️</div>
+    <div class="ambient-balloon" style="left: 10%; animation-delay: 0s;"><img src="icons/balloon.svg" class="emoji-icon" alt=""></div>
+    <div class="ambient-balloon" style="left: 30%; animation-delay: 7s; font-size: 1.6rem;"><img src="icons/cloud.svg" class="emoji-icon" alt=""></div>
+    <div class="ambient-balloon" style="left: 70%; animation-delay: 3s;"><img src="icons/balloon.svg" class="emoji-icon" alt=""></div>
+    <div class="ambient-balloon" style="left: 85%; animation-delay: 11s; font-size: 2rem;"><img src="icons/cloud.svg" class="emoji-icon" alt=""></div>
 
     <div id="presentation-container" class="w-full h-full flex items-center justify-center relative">
-        
+
         <div class="slide active" id="slide-0">
             <div class="pdf-theme-card border-blue-400">
-                <div class="absolute top-4 left-4 text-[clamp(1.5rem,6vw,2.5rem)] opacity-70 animate-float pointer-events-none">🎈</div>
-                <div class="absolute bottom-4 right-4 text-[clamp(1.5rem,6vw,2.5rem)] opacity-70 animate-float pointer-events-none" style="animation-delay: 1s;">📚</div>
-                <h2 class="section-badge text-[clamp(1rem,3.5vw,1.5rem)] text-yellow-800 bg-yellow-200 border-yellow-400 drop-shadow-sm mb-[clamp(1rem,4vh,2rem)]">Starter</h2>
+                <div class="absolute top-4 left-4 text-[clamp(1.2rem,4.5vmin,2.5rem)] opacity-70 animate-float pointer-events-none"><img src="icons/balloon.svg" class="emoji-icon" alt=""></div>
+                <div class="absolute bottom-4 right-4 text-[clamp(1.2rem,4.5vmin,2.5rem)] opacity-70 animate-float pointer-events-none" style="animation-delay: 1s;"><img src="icons/books.svg" class="emoji-icon" alt=""></div>
+                <h2 class="section-badge text-[clamp(0.85rem,2.6vmin,1.5rem)] text-yellow-800 bg-yellow-200 border-yellow-400 drop-shadow-sm mb-[clamp(0.75rem,3vmin,2rem)]">Starter</h2>
                 <div class="flex items-center gap-2 md:gap-4 mb-4 flex-wrap justify-center">
-                    <span class="text-[clamp(2.2rem,9vw,6rem)] animate-bounce-in">🌟</span>
-                    <h1 class="text-[clamp(2rem,9vw,4.5rem)] font-black text-sky-500 tracking-wide uppercase drop-shadow-sm">Rhyming Words</h1>
-                    <span class="text-[clamp(2.2rem,9vw,6rem)] animate-bounce-in" style="animation-delay: 0.2s;">🌟</span>
+                    <span class="text-[clamp(1.8rem,7vmin,6rem)] animate-bounce-in"><img src="icons/star2.svg" class="emoji-icon" alt=""></span>
+                    <h1 class="text-[clamp(1.6rem,7vmin,4.5rem)] font-black text-sky-500 tracking-wide uppercase drop-shadow-sm">Rhyming Words</h1>
+                    <span class="text-[clamp(1.8rem,7vmin,6rem)] animate-bounce-in" style="animation-delay: 0.2s;"><img src="icons/star2.svg" class="emoji-icon" alt=""></span>
                 </div>
-                <p class="text-[clamp(1.1rem,4vw,1.875rem)] text-gray-500 font-bold mt-8">By Christeena John</p>
+                <p class="text-[clamp(0.95rem,3vmin,1.875rem)] text-gray-500 font-bold mt-6">By Christeena John</p>
             </div>
         </div>
 
         <div class="slide" id="slide-1">
             <div class="pdf-theme-card border-green-400">
-                <div class="absolute top-6 left-6 text-[clamp(2rem,7vw,3.5rem)] opacity-30 animate-float pointer-events-none">✏️</div>
-                <div class="absolute bottom-6 right-6 text-[clamp(2rem,7vw,3.5rem)] opacity-30 animate-float pointer-events-none" style="animation-delay: 1.2s;">📖</div>
-                <div class="flex flex-col items-center gap-4 mb-[clamp(1.5rem,5vh,2.5rem)] w-full">
-                    <h2 class="section-badge text-[clamp(1.3rem,5vw,2.25rem)] text-gray-800 bg-white border-green-300">
-                        <span class="text-[clamp(1.8rem,7vw,3.5rem)] animate-happy-jump">🎯</span> Learning Objective
+                <div class="absolute top-6 left-6 text-[clamp(1.6rem,5.5vmin,3.5rem)] opacity-30 animate-float pointer-events-none"><img src="icons/pencil.svg" class="emoji-icon" alt=""></div>
+                <div class="absolute bottom-6 right-6 text-[clamp(1.6rem,5.5vmin,3.5rem)] opacity-30 animate-float pointer-events-none" style="animation-delay: 1.2s;"><img src="icons/openbook.svg" class="emoji-icon" alt=""></div>
+                <div class="flex flex-col items-center gap-4 mb-[clamp(1rem,3.5vmin,2.5rem)] w-full">
+                    <h2 class="section-badge text-[clamp(1.1rem,3.8vmin,2.25rem)] text-gray-800 bg-white border-green-300">
+                        <span class="text-[clamp(1.4rem,5.5vmin,3.5rem)] animate-happy-jump"><img src="icons/target.svg" class="emoji-icon" alt=""></span> Learning Objective
                     </h2>
                 </div>
-                <div class="bg-green-50 p-[clamp(1.2rem,4vw,2rem)] rounded-3xl w-full max-w-2xl border-4 border-green-300 shadow-sm relative">
-                    <span class="text-[clamp(2.5rem,8vw,3.75rem)] absolute -top-6 -right-4 md:-top-8 md:-right-8 animate-float">🔎</span>
-                    <h3 class="text-[clamp(1.4rem,5vw,2.25rem)] font-black text-green-700 mb-6">Today I can…</h3>
-                    <p class="text-[clamp(1.3rem,5vw,2.25rem)] font-bold text-gray-800 leading-tight">Find words that sound alike at the end. 🐱🎩</p>
+                <div class="bg-green-50 p-[clamp(0.9rem,3vmin,2rem)] rounded-3xl w-full max-w-2xl border-4 border-green-300 shadow-sm relative">
+                    <span class="text-[clamp(2rem,6vmin,3.75rem)] absolute -top-6 -right-4 md:-top-8 md:-right-8 animate-float"><img src="icons/magnifyleft.svg" class="emoji-icon" alt=""></span>
+                    <h3 class="text-[clamp(1.15rem,3.8vmin,2.25rem)] font-black text-green-700 mb-4">Today I can…</h3>
+                    <p class="text-[clamp(1.05rem,3.8vmin,2.25rem)] font-bold text-gray-800 leading-tight">Find words that sound alike at the end. <img src="icons/cat.svg" class="emoji-icon" alt="cat"><img src="icons/tophat.svg" class="emoji-icon" alt="hat"></p>
                 </div>
             </div>
         </div>
 
         <div class="slide" id="slide-2">
-            <div class="pdf-theme-card border-pink-400 p-4 md:p-8 scroll-content">
-                <div class="section-badge text-[clamp(1rem,3.5vw,1.5rem)] text-pink-600 bg-pink-100 border-pink-300 mb-[clamp(1rem,3vh,1.5rem)]">🎟️ Entry Ticket: "Find My Friend"</div>
+            <div class="pdf-theme-card border-pink-400 p-3 md:p-6 scroll-content">
+                <div class="section-badge text-[clamp(0.8rem,2.6vmin,1.5rem)] text-pink-600 bg-pink-100 border-pink-300 mb-[clamp(0.6rem,2vmin,1.5rem)]"><img src="icons/ticket.svg" class="emoji-icon" alt=""> Entry Ticket: "Find My Friend"</div>
 
-                <div class="w-full flex flex-col gap-[clamp(0.75rem,2.5vh,1.5rem)] items-center">
+                <div class="w-full flex flex-col gap-[clamp(0.5rem,1.8vmin,1.5rem)] items-center">
                     <!-- Q1 -->
-                    <div class="entry-question bg-gray-50 p-[clamp(0.75rem,3vw,1.5rem)] rounded-3xl w-full border-4 border-gray-200">
-                        <p class="text-[clamp(1.1rem,3.5vw,1.5rem)] font-bold text-gray-600 mb-4">"Which word sounds like CAR?" 🤔</p>
+                    <div class="entry-question bg-gray-50 p-[clamp(0.5rem,2vmin,1.5rem)] rounded-3xl w-full border-4 border-gray-200">
+                        <p class="text-[clamp(0.85rem,2.6vmin,1.5rem)] font-bold text-gray-600 mb-2">"Which word sounds like CAR?" <img src="icons/thinking.svg" class="emoji-icon" alt=""></p>
                         <div class="flex flex-wrap justify-center items-center gap-2 md:gap-4">
-                            <div class="bg-blue-100 px-4 md:px-6 py-3 rounded-2xl border-4 border-blue-300 text-center animate-pulse-glow flex flex-col items-center">
-                                <span class="text-[clamp(2rem,7vw,3rem)] mb-2">🚗</span><span class="text-[clamp(1.1rem,3.5vw,1.5rem)] font-black text-blue-800">CAR</span>
+                            <div class="bg-blue-100 px-3 md:px-6 py-2 md:py-3 rounded-2xl border-4 border-blue-300 text-center animate-pulse-glow flex flex-col items-center">
+                                <span class="text-[clamp(1.5rem,5vmin,3rem)] mb-1"><img src="icons/car.svg" class="emoji-icon" alt=""></span><span class="text-[clamp(0.85rem,2.6vmin,1.5rem)] font-black text-blue-800">CAR</span>
                             </div>
                             <span class="text-4xl font-black text-gray-300 hidden md:block">|</span>
 
-                            <div class="entry-option relative bg-white px-4 md:px-6 py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:scale-105 transition-all wiggle-container flex flex-col items-center" data-correct="false">
-                                <span class="text-[clamp(2rem,7vw,3rem)] mb-2 hover-wiggle">🐶</span><span class="text-[clamp(0.95rem,3vw,1.25rem)] font-bold">DOG</span>
+                            <div class="entry-option relative bg-white px-3 md:px-6 py-2 md:py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:scale-105 transition-all wiggle-container flex flex-col items-center" data-correct="false">
+                                <span class="text-[clamp(1.5rem,5vmin,3rem)] mb-1 hover-wiggle"><img src="icons/dog.svg" class="emoji-icon" alt=""></span><span class="text-[clamp(0.75rem,2.2vmin,1.25rem)] font-bold">DOG</span>
                             </div>
-                            <div class="entry-option relative bg-white px-4 md:px-6 py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:scale-105 transition-all wiggle-container flex flex-col items-center" data-correct="true">
-                                <span class="text-[clamp(2rem,7vw,3rem)] mb-2 hover-wiggle">🌟</span><span class="text-[clamp(0.95rem,3vw,1.25rem)] font-bold">STAR</span>
+                            <div class="entry-option relative bg-white px-3 md:px-6 py-2 md:py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:scale-105 transition-all wiggle-container flex flex-col items-center" data-correct="true">
+                                <span class="text-[clamp(1.5rem,5vmin,3rem)] mb-1 hover-wiggle"><img src="icons/star2.svg" class="emoji-icon" alt=""></span><span class="text-[clamp(0.75rem,2.2vmin,1.25rem)] font-bold">STAR</span>
                             </div>
-                            <div class="entry-option relative bg-white px-4 md:px-6 py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:scale-105 transition-all wiggle-container flex flex-col items-center" data-correct="false">
-                                <span class="text-[clamp(2rem,7vw,3rem)] mb-2 hover-wiggle">🧹</span><span class="text-[clamp(0.95rem,3vw,1.25rem)] font-bold">MOP</span>
+                            <div class="entry-option relative bg-white px-3 md:px-6 py-2 md:py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:scale-105 transition-all wiggle-container flex flex-col items-center" data-correct="false">
+                                <span class="text-[clamp(1.5rem,5vmin,3rem)] mb-1 hover-wiggle"><img src="icons/broom.svg" class="emoji-icon" alt=""></span><span class="text-[clamp(0.75rem,2.2vmin,1.25rem)] font-bold">MOP</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Q2 -->
-                    <div class="entry-question bg-gray-50 p-[clamp(0.75rem,3vw,1.5rem)] rounded-3xl w-full border-4 border-gray-200">
-                        <p class="text-[clamp(1.1rem,3.5vw,1.5rem)] font-bold text-gray-600 mb-4">"Which word sounds like FISH?" 🤔</p>
+                    <div class="entry-question bg-gray-50 p-[clamp(0.5rem,2vmin,1.5rem)] rounded-3xl w-full border-4 border-gray-200">
+                        <p class="text-[clamp(0.85rem,2.6vmin,1.5rem)] font-bold text-gray-600 mb-2">"Which word sounds like FISH?" <img src="icons/thinking.svg" class="emoji-icon" alt=""></p>
                         <div class="flex flex-wrap justify-center items-center gap-2 md:gap-4">
-                            <div class="bg-blue-100 px-4 md:px-6 py-3 rounded-2xl border-4 border-blue-300 text-center animate-pulse-glow flex flex-col items-center">
-                                <span class="text-[clamp(2rem,7vw,3rem)] mb-2">🐟</span><span class="text-[clamp(1.1rem,3.5vw,1.5rem)] font-black text-blue-800">FISH</span>
+                            <div class="bg-blue-100 px-3 md:px-6 py-2 md:py-3 rounded-2xl border-4 border-blue-300 text-center animate-pulse-glow flex flex-col items-center">
+                                <span class="text-[clamp(1.5rem,5vmin,3rem)] mb-1"><img src="icons/fish.svg" class="emoji-icon" alt=""></span><span class="text-[clamp(0.85rem,2.6vmin,1.5rem)] font-black text-blue-800">FISH</span>
                             </div>
                             <span class="text-4xl font-black text-gray-300 hidden md:block">|</span>
 
-                            <div class="entry-option relative bg-white px-4 md:px-6 py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:scale-105 transition-all wiggle-container flex flex-col items-center" data-correct="false">
-                                <span class="text-[clamp(2rem,7vw,3rem)] mb-2 hover-wiggle">🐝</span><span class="text-[clamp(0.95rem,3vw,1.25rem)] font-bold">BEE</span>
+                            <div class="entry-option relative bg-white px-3 md:px-6 py-2 md:py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:scale-105 transition-all wiggle-container flex flex-col items-center" data-correct="false">
+                                <span class="text-[clamp(1.5rem,5vmin,3rem)] mb-1 hover-wiggle"><img src="icons/bee.svg" class="emoji-icon" alt=""></span><span class="text-[clamp(0.75rem,2.2vmin,1.25rem)] font-bold">BEE</span>
                             </div>
-                            <div class="entry-option relative bg-white px-4 md:px-6 py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:scale-105 transition-all wiggle-container flex flex-col items-center" data-correct="true">
-                                <span class="text-[clamp(2rem,7vw,3rem)] mb-2 hover-wiggle">🍽️</span><span class="text-[clamp(0.95rem,3vw,1.25rem)] font-bold">DISH</span>
+                            <div class="entry-option relative bg-white px-3 md:px-6 py-2 md:py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:scale-105 transition-all wiggle-container flex flex-col items-center" data-correct="true">
+                                <span class="text-[clamp(1.5rem,5vmin,3rem)] mb-1 hover-wiggle"><img src="icons/plate.svg" class="emoji-icon" alt=""></span><span class="text-[clamp(0.75rem,2.2vmin,1.25rem)] font-bold">DISH</span>
                             </div>
-                            <div class="entry-option relative bg-white px-4 md:px-6 py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:scale-105 transition-all wiggle-container flex flex-col items-center" data-correct="false">
-                                <span class="text-[clamp(2rem,7vw,3rem)] mb-2 hover-wiggle">🧹</span><span class="text-[clamp(0.95rem,3vw,1.25rem)] font-bold">MOP</span>
+                            <div class="entry-option relative bg-white px-3 md:px-6 py-2 md:py-3 rounded-2xl border-4 border-gray-200 text-center cursor-pointer hover:scale-105 transition-all wiggle-container flex flex-col items-center" data-correct="false">
+                                <span class="text-[clamp(1.5rem,5vmin,3rem)] mb-1 hover-wiggle"><img src="icons/broom.svg" class="emoji-icon" alt=""></span><span class="text-[clamp(0.75rem,2.2vmin,1.25rem)] font-bold">MOP</span>
                             </div>
                         </div>
                     </div>
+
+                    <button id="entry-reset-btn" onclick="resetEntryTicket()" class="hidden solid-btn bg-sky-500 border-sky-700 text-[clamp(0.8rem,2.4vmin,1.1rem)] font-black py-2 md:py-2.5 px-5 md:px-6 mt-1 hover:scale-105 hover:bg-sky-400">
+                        <img src="icons/repeat.svg" class="emoji-icon" alt=""> Reset Entry Ticket
+                    </button>
                 </div>
             </div>
         </div>
 
         <div class="slide" id="slide-3">
             <div class="pdf-theme-card border-purple-400 overflow-hidden relative">
-                <div class="section-badge text-[clamp(0.95rem,3.2vw,1.5rem)] text-purple-700 bg-purple-100 border-purple-300 absolute top-[clamp(0.5rem,2vh,1.5rem)] z-50">🧩 Hands-on: Find Your Word Friend!</div>
+                <div class="section-badge text-[clamp(0.75rem,2.4vmin,1.5rem)] text-purple-700 bg-purple-100 border-purple-300 absolute top-[clamp(0.4rem,1.5vmin,1.5rem)] z-50"><img src="icons/puzzle.svg" class="emoji-icon" alt=""> Hands-on: Find Your Word Friend!</div>
 
-                <div class="w-full h-full pt-[clamp(4.5rem,16vh,7rem)] relative">
+                <div class="w-full h-full pt-[clamp(3.5rem,12vmin,7rem)] relative">
                     <!-- Mixed cards -->
-                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 15%; left: 8%; transform: rotate(-8deg);"><span class="text-[clamp(2.2rem,7vw,3.75rem)]">🐱</span> <b>CAT</b></div>
-                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 25%; left: 62%; transform: rotate(12deg);"><span class="text-[clamp(2.2rem,7vw,3.75rem)]">🎩</span> <b>HAT</b></div>
-                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 55%; left: 12%; transform: rotate(-5deg);"><span class="text-[clamp(2.2rem,7vw,3.75rem)]">🐶</span> <b>DOG</b></div>
-                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 15%; left: 36%; transform: rotate(8deg);"><span class="text-[clamp(2.2rem,7vw,3.75rem)]">🪵</span> <b>LOG</b></div>
-                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 65%; left: 62%; transform: rotate(-10deg);"><span class="text-[clamp(2.2rem,7vw,3.75rem)]">🐝</span> <b>BEE</b></div>
-                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 45%; left: 36%; transform: rotate(5deg);"><span class="text-[clamp(2.2rem,7vw,3.75rem)]">🌳</span> <b>TREE</b></div>
+                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 15%; left: 8%; transform: rotate(-8deg);"><span class="text-[clamp(1.7rem,5.2vmin,3.75rem)]"><img src="icons/cat.svg" class="emoji-icon" alt=""></span> <b>CAT</b></div>
+                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 25%; left: 62%; transform: rotate(12deg);"><span class="text-[clamp(1.7rem,5.2vmin,3.75rem)]"><img src="icons/tophat.svg" class="emoji-icon" alt=""></span> <b>HAT</b></div>
+                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 55%; left: 12%; transform: rotate(-5deg);"><span class="text-[clamp(1.7rem,5.2vmin,3.75rem)]"><img src="icons/dog.svg" class="emoji-icon" alt=""></span> <b>DOG</b></div>
+                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 15%; left: 36%; transform: rotate(8deg);"><span class="text-[clamp(1.7rem,5.2vmin,3.75rem)]"><img src="icons/log.svg" class="emoji-icon" alt=""></span> <b>LOG</b></div>
+                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 65%; left: 62%; transform: rotate(-10deg);"><span class="text-[clamp(1.7rem,5.2vmin,3.75rem)]"><img src="icons/bee.svg" class="emoji-icon" alt=""></span> <b>BEE</b></div>
+                    <div class="scatter-card flex flex-col items-center gap-1" style="top: 45%; left: 36%; transform: rotate(5deg);"><span class="text-[clamp(1.7rem,5.2vmin,3.75rem)]"><img src="icons/tree.svg" class="emoji-icon" alt=""></span> <b>TREE</b></div>
                 </div>
             </div>
         </div>
 
         <div class="slide" id="slide-4">
             <div class="pdf-theme-card border-yellow-400">
-                <div class="absolute top-4 right-4 text-[clamp(1.8rem,6vw,3rem)] opacity-40 animate-float pointer-events-none">🎶</div>
-                <h2 class="section-badge text-[clamp(1.15rem,4.2vw,1.875rem)] text-yellow-600 bg-yellow-50 border-yellow-300 mb-[clamp(1rem,4vh,2rem)]">🎵 "Cat, Cat, Wear a Hat!"</h2>
+                <div class="absolute top-4 right-4 text-[clamp(1.4rem,4.5vmin,3rem)] opacity-40 animate-float pointer-events-none"><img src="icons/notes.svg" class="emoji-icon" alt=""></div>
+                <h2 class="section-badge text-[clamp(0.95rem,3.2vmin,1.875rem)] text-yellow-600 bg-yellow-50 border-yellow-300 mb-[clamp(0.75rem,3vmin,2rem)]"><img src="icons/note.svg" class="emoji-icon" alt=""> "Cat, Cat, Wear a Hat!"</h2>
 
-                <div class="space-y-[clamp(0.5rem,1.8vh,1rem)] text-center text-[clamp(1.15rem,4.2vw,2.25rem)] font-bold text-gray-800 leading-relaxed w-full max-w-2xl">
-                    <div class="bg-gray-50 p-[clamp(0.6rem,2vw,1rem)] rounded-2xl border-2 border-gray-200 hover:scale-105 transition-transform hover:bg-blue-50 cursor-default">Cat, cat, wear a hat, 🐱🎩</div>
-                    <div class="bg-gray-50 p-[clamp(0.6rem,2vw,1rem)] rounded-2xl border-2 border-gray-200 hover:scale-105 transition-transform hover:bg-green-50 cursor-default">Dog, dog, sit on a log, 🐶🪵</div>
-                    <div class="bg-gray-50 p-[clamp(0.6rem,2vw,1rem)] rounded-2xl border-2 border-gray-200 hover:scale-105 transition-transform hover:bg-pink-50 cursor-default">Bee, bee, climb a tree, 🐝🌳</div>
-                    <div class="bg-yellow-100 p-[clamp(0.6rem,2vw,1rem)] rounded-2xl border-4 border-yellow-300 hover:scale-105 transition-transform text-yellow-800 animate-pulse-glow">Sun, sun, have some fun! ☀️🎉</div>
+                <div class="space-y-[clamp(0.35rem,1.3vmin,1rem)] text-center text-[clamp(0.95rem,3.2vmin,2.25rem)] font-bold text-gray-800 leading-relaxed w-full max-w-2xl">
+                    <div class="bg-gray-50 p-[clamp(0.45rem,1.5vmin,1rem)] rounded-2xl border-2 border-gray-200 hover:scale-105 transition-transform hover:bg-blue-50 cursor-default">Cat, cat, wear a hat, <img src="icons/cat.svg" class="emoji-icon" alt="cat"><img src="icons/tophat.svg" class="emoji-icon" alt="hat"></div>
+                    <div class="bg-gray-50 p-[clamp(0.45rem,1.5vmin,1rem)] rounded-2xl border-2 border-gray-200 hover:scale-105 transition-transform hover:bg-green-50 cursor-default">Dog, dog, sit on a log, <img src="icons/dog.svg" class="emoji-icon" alt="dog"><img src="icons/log.svg" class="emoji-icon" alt="log"></div>
+                    <div class="bg-gray-50 p-[clamp(0.45rem,1.5vmin,1rem)] rounded-2xl border-2 border-gray-200 hover:scale-105 transition-transform hover:bg-pink-50 cursor-default">Bee, bee, climb a tree, <img src="icons/bee.svg" class="emoji-icon" alt="bee"><img src="icons/tree.svg" class="emoji-icon" alt="tree"></div>
+                    <div class="bg-yellow-100 p-[clamp(0.45rem,1.5vmin,1rem)] rounded-2xl border-4 border-yellow-300 hover:scale-105 transition-transform text-yellow-800 animate-pulse-glow">Sun, sun, have some fun! <img src="icons/sun.svg" class="emoji-icon" alt="sun"><img src="icons/party.svg" class="emoji-icon" alt="party"></div>
                 </div>
-                <p class="mt-[clamp(1rem,3vh,2rem)] text-[clamp(0.9rem,2.8vw,1.25rem)] text-gray-400 italic font-bold">*(Tune: Twinkle, Twinkle, Little Star)*</p>
+                <p class="mt-[clamp(0.6rem,2.2vmin,2rem)] text-[clamp(0.75rem,2.2vmin,1.25rem)] text-gray-400 italic font-bold">*(Tune: Twinkle, Twinkle, Little Star)*</p>
             </div>
         </div>
 
         <div class="slide" id="slide-5">
             <div class="pdf-theme-card border-red-500">
-                <div class="section-badge text-[clamp(0.95rem,3.2vw,1.5rem)] text-gray-800 bg-white border-red-300 mb-[clamp(0.75rem,3vh,1.5rem)]">🇦🇪 UAE Connection: "Look Around Our UAE!"</div>
+                <div class="section-badge text-[clamp(0.75rem,2.4vmin,1.5rem)] text-gray-800 bg-white border-red-300 mb-[clamp(0.5rem,2vmin,1.5rem)]"><img src="icons/flag_uae.svg" class="emoji-icon" alt=""> UAE Connection: "Look Around Our UAE!"</div>
 
-                <div class="flex flex-col items-center justify-center w-full max-w-3xl flex-grow relative">
+                <div class="flex flex-col items-center justify-center w-full max-w-3xl flex-grow relative gap-[clamp(0.4rem,1.5vmin,1rem)]">
 
-                    <!-- Interactive Button to reveal -->
-                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
-                        <button id="uae-reveal-btn" onclick="revealUaeContent()" class="solid-btn bg-amber-500 border-amber-700 text-[clamp(1rem,4vw,1.5rem)] font-black py-3 md:py-4 px-6 md:px-8 animate-pulse-glow whitespace-nowrap">
-                            Tap to Explore! 🔍
+                    <!-- The Flag: always fully visible and unobstructed at the start -->
+                    <div class="text-[clamp(3.5rem,14vmin,8rem)] drop-shadow-xl animate-float z-20" id="uae-flag-icon"><img src="icons/flag_uae.svg" class="emoji-icon" alt="UAE flag"></div>
+
+                    <!-- Stage 0: Tap to Explore -->
+                    <button id="uae-reveal-btn" onclick="revealFlagWord()" class="solid-btn bg-amber-500 border-amber-700 text-[clamp(0.9rem,3.2vmin,1.5rem)] font-black py-2.5 md:py-3 px-5 md:px-8 animate-pulse-glow whitespace-nowrap">
+                        Tap to Explore! <img src="icons/magnifyright.svg" class="emoji-icon" alt="">
+                    </button>
+
+                    <!-- Stage 1: reveals the word FLAG + question + a second button -->
+                    <div id="uae-flag-stage" class="w-full flex flex-col items-center opacity-0 h-0 overflow-hidden transition-opacity duration-700 gap-[clamp(0.35rem,1.2vmin,0.75rem)]">
+                        <h2 class="text-[clamp(1.8rem,7.5vmin,4.5rem)] font-black text-black tracking-widest bg-red-100 px-6 md:px-10 py-1.5 md:py-2 rounded-2xl border-4 border-red-300 inline-block shadow-sm">FLAG</h2>
+                        <p class="text-[clamp(0.8rem,2.6vmin,1.5rem)] font-bold text-gray-600 text-center max-w-xl">Can you come up with words that end with the same sound as that of flag? <img src="icons/starstruck.svg" class="emoji-icon" alt=""></p>
+                        <button id="uae-words-btn" onclick="revealUaeWords()" class="solid-btn bg-emerald-500 border-emerald-700 text-[clamp(0.85rem,2.8vmin,1.25rem)] font-black py-2 md:py-2.5 px-5 md:px-6 animate-pulse-glow whitespace-nowrap">
+                            Reveal the Words! <img src="icons/star2.svg" class="emoji-icon" alt="">
                         </button>
                     </div>
 
-                    <!-- The Flag (Always visible initially) -->
-                    <div class="text-[clamp(5rem,22vw,10rem)] drop-shadow-xl animate-float z-20" id="uae-flag-icon">🇦🇪</div>
-
-                    <!-- Hidden Content Container -->
-                    <div id="uae-hidden-content" class="w-full flex flex-col items-center opacity-0 transition-opacity duration-700 mt-4 h-0 overflow-hidden">
-                        <h2 class="text-[clamp(2.5rem,10vw,4.5rem)] font-black text-black tracking-widest bg-red-100 px-10 py-2 rounded-2xl border-4 border-red-300 mb-6 inline-block shadow-sm">FLAG</h2>
-
-                        <p class="text-[clamp(1rem,3.5vw,1.5rem)] font-bold text-gray-600 mb-6 text-center max-w-xl">Can you come up with words that end with the same sound as that of flag? 🤩</p>
-
-                        <div class="flex flex-wrap justify-center gap-3 md:gap-6">
-                            <div class="uae-word-item bg-white px-4 md:px-6 py-3 md:py-4 rounded-2xl text-[clamp(1.5rem,6vw,2.25rem)] font-black border-4 border-blue-400 shadow-[0_6px_0_#60a5fa] hover:translate-y-1 hover:shadow-[0_2px_0_#60a5fa] transition-all cursor-pointer flex flex-col items-center gap-2"><span>🎒</span>BAG</div>
-                            <div class="uae-word-item bg-white px-4 md:px-6 py-3 md:py-4 rounded-2xl text-[clamp(1.5rem,6vw,2.25rem)] font-black border-4 border-yellow-400 shadow-[0_6px_0_#facc15] hover:translate-y-1 hover:shadow-[0_2px_0_#facc15] transition-all cursor-pointer flex flex-col items-center gap-2"><span>🏷️</span>TAG</div>
-                            <div class="uae-word-item bg-white px-4 md:px-6 py-3 md:py-4 rounded-2xl text-[clamp(1.5rem,6vw,2.25rem)] font-black border-4 border-green-400 shadow-[0_6px_0_#4ade80] hover:translate-y-1 hover:shadow-[0_2px_0_#4ade80] transition-all cursor-pointer flex flex-col items-center gap-2"><span>🧻</span>RAG</div>
-                            <div class="uae-word-item bg-white px-4 md:px-6 py-3 md:py-4 rounded-2xl text-[clamp(1.5rem,6vw,2.25rem)] font-black border-4 border-pink-400 shadow-[0_6px_0_#f472b6] hover:translate-y-1 hover:shadow-[0_2px_0_#f472b6] transition-all cursor-pointer flex flex-col items-center gap-2"><span>🐕</span>WAG</div>
-                        </div>
+                    <!-- Stage 2: the rhyming word examples, staggered in 0.75s apart -->
+                    <div id="uae-hidden-content" class="w-full flex flex-wrap justify-center gap-2 md:gap-6 opacity-0 h-0 overflow-hidden transition-opacity duration-700">
+                        <div class="uae-word-item bg-white px-3 md:px-6 py-2 md:py-4 rounded-2xl text-[clamp(1.1rem,4.2vmin,2.25rem)] font-black border-4 border-blue-400 shadow-[0_6px_0_#60a5fa] hover:translate-y-1 hover:shadow-[0_2px_0_#60a5fa] transition-all cursor-pointer flex flex-col items-center gap-1"><span><img src="icons/backpack.svg" class="emoji-icon" alt=""></span>BAG</div>
+                        <div class="uae-word-item bg-white px-3 md:px-6 py-2 md:py-4 rounded-2xl text-[clamp(1.1rem,4.2vmin,2.25rem)] font-black border-4 border-yellow-400 shadow-[0_6px_0_#facc15] hover:translate-y-1 hover:shadow-[0_2px_0_#facc15] transition-all cursor-pointer flex flex-col items-center gap-1"><span><img src="icons/tag.svg" class="emoji-icon" alt=""></span>TAG</div>
+                        <div class="uae-word-item bg-white px-3 md:px-6 py-2 md:py-4 rounded-2xl text-[clamp(1.1rem,4.2vmin,2.25rem)] font-black border-4 border-green-400 shadow-[0_6px_0_#4ade80] hover:translate-y-1 hover:shadow-[0_2px_0_#4ade80] transition-all cursor-pointer flex flex-col items-center gap-1"><span><img src="icons/paper.svg" class="emoji-icon" alt=""></span>RAG</div>
+                        <div class="uae-word-item bg-white px-3 md:px-6 py-2 md:py-4 rounded-2xl text-[clamp(1.1rem,4.2vmin,2.25rem)] font-black border-4 border-pink-400 shadow-[0_6px_0_#f472b6] hover:translate-y-1 hover:shadow-[0_2px_0_#f472b6] transition-all cursor-pointer flex flex-col items-center gap-1"><span><img src="icons/dog2.svg" class="emoji-icon" alt=""></span>WAG</div>
                     </div>
                 </div>
             </div>
@@ -338,45 +350,45 @@
 
         <div class="slide p-0 md:p-4" id="slide-6">
             <div class="pdf-theme-card border-blue-500 overflow-hidden !p-0">
-                
-                <div class="absolute top-3 left-3 md:top-4 md:left-4 bg-white px-3 md:px-4 py-1.5 md:py-2 rounded-full font-bold text-blue-600 shadow-md z-30 flex items-center gap-1 md:gap-2 border-2 border-blue-200 text-[clamp(0.7rem,2.2vw,0.95rem)]">
-                    💻 <span class="hidden sm:inline">Online Game: "Choose the Word Friend"</span><span class="sm:hidden">Choose the Word Friend</span>
+
+                <div class="absolute top-2 left-2 md:top-4 md:left-4 bg-white px-2.5 md:px-4 py-1 md:py-2 rounded-full font-bold text-blue-600 shadow-md z-30 flex items-center gap-1 md:gap-2 border-2 border-blue-200 text-[clamp(0.6rem,1.8vmin,0.95rem)]">
+                    <img src="icons/laptop.svg" class="emoji-icon" alt=""> <span class="hidden sm:inline">Online Game: "Choose the Word Friend"</span><span class="sm:hidden">Choose the Word Friend</span>
                 </div>
 
                 <!-- Game Start Screen -->
                 <div id="game-start-screen" class="flex flex-col items-center justify-center w-full h-full absolute z-20 bg-white transition-opacity duration-500 p-4">
-                    <div class="text-[clamp(4rem,18vw,8rem)] mb-4 md:mb-6 animate-breathe drop-shadow-md">🌟</div>
-                    <h1 class="text-[clamp(1.6rem,7vw,3rem)] font-black text-blue-600 mb-6 md:mb-8 uppercase tracking-wide text-center px-4">Choose the Word Friend!</h1>
-                    <button id="start-game-btn" class="solid-btn bg-amber-500 border-amber-700 text-[clamp(1.1rem,4.5vw,1.875rem)] font-black py-3 md:py-6 px-8 md:px-14 hover:scale-105 hover:bg-amber-400">
-                        PLAY GAME ▶️
+                    <div class="text-[clamp(3rem,13vmin,8rem)] mb-3 md:mb-6 animate-breathe drop-shadow-md"><img src="icons/star2.svg" class="emoji-icon" alt=""></div>
+                    <h1 class="text-[clamp(1.3rem,5.5vmin,3rem)] font-black text-blue-600 mb-4 md:mb-8 uppercase tracking-wide text-center px-4">Choose the Word Friend!</h1>
+                    <button id="start-game-btn" class="solid-btn bg-amber-500 border-amber-700 text-[clamp(0.95rem,3.6vmin,1.875rem)] font-black py-2.5 md:py-6 px-6 md:px-14 hover:scale-105 hover:bg-amber-400">
+                        PLAY GAME ▶
                     </button>
-                    <p class="mt-6 md:mt-8 text-[clamp(0.85rem,3vw,1.1rem)] text-gray-400 font-bold max-w-md text-center px-4">"I am going to choose one helper. Can you help us find the correct answer?"</p>
+                    <p class="mt-4 md:mt-8 text-[clamp(0.7rem,2.2vmin,1.1rem)] text-gray-400 font-bold max-w-md text-center px-4">"I am going to choose one helper. Can you help us find the correct answer?"</p>
                 </div>
 
                 <!-- Game UI Core -->
-                <div id="game-ui-container" class="w-full h-full flex flex-col hidden p-3 md:p-8 bg-blue-50 rounded-[32px] overflow-y-auto">
+                <div id="game-ui-container" class="w-full h-full flex flex-col hidden p-2.5 md:p-8 bg-blue-50 rounded-[32px] overflow-y-auto">
 
                     <!-- Progress Bar -->
-                    <div class="flex justify-between items-center w-full mb-2 md:mb-4 z-10 bg-white p-2 md:p-3 rounded-full shadow-sm border-2 border-blue-100">
-                        <div class="flex items-center gap-1 md:gap-2 font-black text-blue-600 px-2 text-[clamp(0.85rem,3vw,1.1rem)]">
-                            <span class="text-xl md:text-2xl">🏆</span> Match <span id="current-round-display">1</span>/3
+                    <div class="flex justify-between items-center w-full mb-1.5 md:mb-4 z-10 bg-white p-1.5 md:p-3 rounded-full shadow-sm border-2 border-blue-100">
+                        <div class="flex items-center gap-1 md:gap-2 font-black text-blue-600 px-2 text-[clamp(0.75rem,2.4vmin,1.1rem)]">
+                            <span class="text-lg md:text-2xl"><img src="icons/trophy.svg" class="emoji-icon" alt=""></span> Match <span id="current-round-display">1</span>/3
                         </div>
-                        <div id="progress-dots" class="flex gap-2 md:gap-3 px-2"></div>
+                        <div id="progress-dots" class="flex gap-1.5 md:gap-3 px-2"></div>
                     </div>
 
                     <!-- Target Area -->
-                    <div class="flex-grow flex flex-col items-center justify-start w-full relative mt-2 md:mt-4">
-                        <div class="w-full flex justify-center mb-4 md:mb-8 z-20">
-                            <div id="target-container" class="bg-white border-4 border-dashed border-gray-400 rounded-3xl p-4 md:p-6 flex flex-col items-center justify-center min-w-[160px] shadow-sm relative">
-                                <span class="absolute -top-4 bg-gray-600 text-white px-3 md:px-4 py-1 rounded-full font-bold text-[clamp(0.65rem,2vw,0.85rem)] uppercase tracking-wider shadow-sm whitespace-nowrap">Target Word</span>
-                                <div id="target-icon" class="text-[clamp(3rem,12vw,6rem)] drop-shadow-sm mb-2 mt-2">❓</div>
-                                <div id="target-word" class="text-[clamp(1.5rem,6vw,2.25rem)] font-black text-gray-800 tracking-wide uppercase">???</div>
+                    <div class="flex-grow flex flex-col items-center justify-start w-full relative mt-1.5 md:mt-4">
+                        <div class="w-full flex justify-center mb-3 md:mb-8 z-20">
+                            <div id="target-container" class="bg-white border-4 border-dashed border-gray-400 rounded-3xl p-2.5 md:p-6 flex flex-col items-center justify-center min-w-[140px] shadow-sm relative">
+                                <span class="absolute -top-3.5 bg-gray-600 text-white px-2.5 md:px-4 py-0.5 md:py-1 rounded-full font-bold text-[clamp(0.55rem,1.6vmin,0.85rem)] uppercase tracking-wider shadow-sm whitespace-nowrap">Target Word</span>
+                                <div id="target-icon" class="text-[clamp(2.2rem,9vmin,6rem)] drop-shadow-sm mb-1 mt-2"><img src="icons/question.svg" class="emoji-icon" alt="?"></div>
+                                <div id="target-word" class="text-[clamp(1.1rem,4.5vmin,2.25rem)] font-black text-gray-800 tracking-wide uppercase">???</div>
                             </div>
                         </div>
 
                         <!-- Options Container -->
-                        <p class="text-[clamp(0.85rem,3vw,1.25rem)] font-bold text-gray-500 mb-3 md:mb-4 uppercase tracking-widest bg-white/50 px-4 py-1 rounded-full text-center">Which one is the word friend?</p>
-                        <div id="options-container" class="flex flex-col md:flex-row gap-3 md:gap-8 w-full z-20 max-w-4xl mx-auto items-center justify-center">
+                        <p class="text-[clamp(0.7rem,2.2vmin,1.25rem)] font-bold text-gray-500 mb-2 md:mb-4 uppercase tracking-widest bg-white/50 px-4 py-1 rounded-full text-center">Which one is the word friend?</p>
+                        <div id="options-container" class="flex flex-col md:flex-row gap-2 md:gap-8 w-full z-20 max-w-4xl mx-auto items-center justify-center">
                             <!-- Option cards injected via JS -->
                         </div>
                     </div>
@@ -384,14 +396,14 @@
 
                 <!-- Game End Screen -->
                 <div id="game-end-screen" class="flex flex-col items-center justify-center w-full h-full absolute z-20 bg-white hidden p-4">
-                    <h1 class="text-[clamp(2rem,8vw,3.75rem)] font-black text-green-500 mb-4 md:mb-6 uppercase drop-shadow-sm text-center">Amazing Job!</h1>
-                    <div class="text-[clamp(4.5rem,18vw,9rem)] mb-6 md:mb-10 animate-happy-jump drop-shadow-xl">🥇</div>
-                    <div class="flex flex-col md:flex-row gap-3 md:gap-4">
-                        <button onclick="playPopSound(); initGame();" class="solid-btn bg-amber-500 border-amber-700 text-[clamp(1rem,4vw,1.5rem)] font-black py-3 md:py-4 px-6 md:px-10 hover:scale-105 hover:bg-amber-400">
-                            🔄 REPLAY GAME
+                    <h1 class="text-[clamp(1.6rem,6.5vmin,3.75rem)] font-black text-green-500 mb-3 md:mb-6 uppercase drop-shadow-sm text-center">Amazing Job!</h1>
+                    <div class="text-[clamp(3.5rem,13vmin,9rem)] mb-4 md:mb-10 animate-happy-jump drop-shadow-xl"><img src="icons/medal.svg" class="emoji-icon" alt=""></div>
+                    <div class="flex flex-col md:flex-row gap-2.5 md:gap-4">
+                        <button onclick="playPopSound(); initGame();" class="solid-btn bg-amber-500 border-amber-700 text-[clamp(0.85rem,3vmin,1.5rem)] font-black py-2.5 md:py-4 px-5 md:px-10 hover:scale-105 hover:bg-amber-400">
+                            <img src="icons/repeat.svg" class="emoji-icon" alt=""> REPLAY GAME
                         </button>
-                        <button onclick="nextSlide()" class="solid-btn bg-green-500 border-green-700 text-[clamp(1rem,4vw,1.5rem)] font-black py-3 md:py-4 px-6 md:px-10 hover:scale-105">
-                            NEXT SLIDE ➡️
+                        <button onclick="nextSlide()" class="solid-btn bg-green-500 border-green-700 text-[clamp(0.85rem,3vmin,1.5rem)] font-black py-2.5 md:py-4 px-5 md:px-10 hover:scale-105">
+                            NEXT SLIDE <img src="icons/arrowright.svg" class="emoji-icon" alt="">
                         </button>
                     </div>
                 </div>
@@ -400,16 +412,16 @@
 
         <div class="slide" id="slide-7">
             <div class="pdf-theme-card border-purple-400 scroll-content">
-                <div class="section-badge text-[clamp(1.1rem,4.2vw,1.875rem)] text-purple-700 bg-purple-100 border-purple-300 mb-[clamp(1rem,4vh,2.5rem)]">
-                    <span class="text-[clamp(1.5rem,5.5vw,2.25rem)]">👂</span> What Did You Notice?
+                <div class="section-badge text-[clamp(0.9rem,3.2vmin,1.875rem)] text-purple-700 bg-purple-100 border-purple-300 mb-[clamp(0.6rem,2.4vmin,2.5rem)]">
+                    <span class="text-[clamp(1.2rem,4.2vmin,2.25rem)]"><img src="icons/ear.svg" class="emoji-icon" alt=""></span> What Did You Notice?
                 </div>
 
                 <!-- Populated dynamically from the gameLevels data played in the previous slide -->
-                <div id="notice-matches" class="flex flex-col gap-[clamp(0.6rem,2vh,1.5rem)] mb-[clamp(1rem,4vh,2.5rem)] text-[clamp(1.3rem,5.5vw,2.25rem)] font-bold text-gray-700 w-full max-w-2xl"></div>
+                <div id="notice-matches" class="flex flex-col gap-[clamp(0.4rem,1.6vmin,1.5rem)] mb-[clamp(0.6rem,2.4vmin,2.5rem)] text-[clamp(1rem,4.2vmin,2.25rem)] font-bold text-gray-700 w-full max-w-2xl"></div>
 
-                <div class="bg-yellow-100 p-[clamp(1rem,3.5vw,1.5rem)] rounded-3xl border-4 border-yellow-300 animate-pulse-glow w-full max-w-2xl shadow-sm">
-                    <h3 class="text-[clamp(1.1rem,4vw,1.5rem)] font-black text-yellow-800 mb-2">🤔 "What do you notice?"</h3>
-                    <h3 class="text-[clamp(1.1rem,4vw,1.5rem)] font-black text-yellow-800">"What happens at the end of these words?"</h3>
+                <div class="bg-yellow-100 p-[clamp(0.6rem,2.4vmin,1.5rem)] rounded-3xl border-4 border-yellow-300 animate-pulse-glow w-full max-w-2xl shadow-sm">
+                    <h3 class="text-[clamp(0.85rem,2.8vmin,1.5rem)] font-black text-yellow-800 mb-1">"What do you notice?"</h3>
+                    <h3 class="text-[clamp(0.85rem,2.8vmin,1.5rem)] font-black text-yellow-800">"What happens at the end of these words?"</h3>
                 </div>
             </div>
         </div>
@@ -418,36 +430,36 @@
             <div class="pdf-theme-card border-pink-400 justify-center scroll-content">
 
                 <!-- Decorative background elements -->
-                <div class="absolute -top-10 -left-10 text-[clamp(4rem,18vw,8rem)] opacity-20 transform -rotate-12 pointer-events-none">🌈</div>
-                <div class="absolute -bottom-10 -right-10 text-[clamp(4rem,18vw,8rem)] opacity-20 transform rotate-12 pointer-events-none">🌟</div>
-                <div class="absolute top-6 right-6 text-[clamp(1.5rem,6vw,2.5rem)] opacity-40 animate-float pointer-events-none">🎈</div>
-                <div class="absolute bottom-6 left-6 text-[clamp(1.5rem,6vw,2.5rem)] opacity-40 animate-float pointer-events-none" style="animation-delay: 1s;">🎉</div>
+                <div class="absolute -top-10 -left-10 text-[clamp(3rem,14vmin,8rem)] opacity-20 transform -rotate-12 pointer-events-none"><img src="icons/rainbow.svg" class="emoji-icon" alt=""></div>
+                <div class="absolute -bottom-10 -right-10 text-[clamp(3rem,14vmin,8rem)] opacity-20 transform rotate-12 pointer-events-none"><img src="icons/star2.svg" class="emoji-icon" alt=""></div>
+                <div class="absolute top-6 right-6 text-[clamp(1.2rem,4.5vmin,2.5rem)] opacity-40 animate-float pointer-events-none"><img src="icons/balloon.svg" class="emoji-icon" alt=""></div>
+                <div class="absolute bottom-6 left-6 text-[clamp(1.2rem,4.5vmin,2.5rem)] opacity-40 animate-float pointer-events-none" style="animation-delay: 1s;"><img src="icons/party.svg" class="emoji-icon" alt=""></div>
 
-                <h1 class="text-[clamp(1.8rem,9vw,6rem)] font-black text-sky-500 mb-[clamp(1rem,4vh,2rem)] uppercase drop-shadow-sm animate-bounce-in flex items-center gap-2 md:gap-4 flex-wrap justify-center leading-tight">
-                    RHYMING WORDS <span class="text-[clamp(1.8rem,9vw,3.75rem)]">🌈</span>
+                <h1 class="text-[clamp(1.4rem,6.5vmin,6rem)] font-black text-sky-500 mb-[clamp(0.6rem,2.4vmin,2rem)] uppercase drop-shadow-sm animate-bounce-in flex items-center gap-2 md:gap-4 flex-wrap justify-center leading-tight">
+                    RHYMING WORDS <span class="text-[clamp(1.4rem,6.5vmin,3.75rem)]"><img src="icons/rainbow.svg" class="emoji-icon" alt=""></span>
                 </h1>
 
-                <div class="bg-white p-[clamp(1rem,4vw,2rem)] rounded-3xl border-4 border-dashed border-gray-300 mb-[clamp(1rem,4vh,2.5rem)] w-full max-w-3xl shadow-sm relative z-10">
-                    <p class="text-[clamp(1.2rem,5vw,2.25rem)] font-bold text-gray-700 leading-relaxed">
-                        Words that sound alike at the end are called <br><span class="text-pink-600 text-[clamp(1.5rem,6.5vw,3rem)] font-black block mt-4 bg-pink-50 inline-block px-6 py-2 rounded-full border-2 border-pink-200">rhyming words.</span>
+                <div class="bg-white p-[clamp(0.6rem,2.6vmin,2rem)] rounded-3xl border-4 border-dashed border-gray-300 mb-[clamp(0.6rem,2.4vmin,2.5rem)] w-full max-w-3xl shadow-sm relative z-10">
+                    <p class="text-[clamp(0.95rem,3.6vmin,2.25rem)] font-bold text-gray-700 leading-relaxed">
+                        Words that sound alike at the end are called <br><span class="text-pink-600 text-[clamp(1.2rem,4.8vmin,3rem)] font-black block mt-3 bg-pink-50 inline-block px-5 py-1.5 rounded-full border-2 border-pink-200">rhyming words.</span>
                     </p>
                 </div>
 
-                <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-[clamp(1rem,4vh,3rem)] text-[clamp(1.5rem,5.5vw,3rem)] font-black text-gray-800 bg-gray-50 p-[clamp(1rem,3vw,1.5rem)] rounded-3xl border-4 border-gray-200 z-10 w-full max-w-3xl">
-                    <span class="bg-white px-6 md:px-8 py-3 md:py-4 rounded-2xl border-4 border-gray-300 flex flex-col items-center gap-2"><span class="text-[clamp(2rem,8vw,3.75rem)]">🐱</span> CAT</span>
-                    <span class="text-gray-300 text-[clamp(2rem,8vw,3.75rem)] rotate-90 md:rotate-0">➡️</span>
-                    <span class="bg-white px-6 md:px-8 py-3 md:py-4 rounded-2xl border-4 border-gray-300 flex flex-col items-center gap-2"><span class="text-[clamp(2rem,8vw,3.75rem)]">🎩</span> HAT</span>
-                    <div class="w-full text-center mt-2 md:mt-0 md:ml-4">
-                        <span class="text-[clamp(0.9rem,3vw,1.25rem)] text-gray-500 block font-bold">"CAT and HAT are rhyming words."</span>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-2.5 md:gap-6 mb-[clamp(0.6rem,2.4vmin,3rem)] text-[clamp(1.1rem,4.2vmin,3rem)] font-black text-gray-800 bg-gray-50 p-[clamp(0.6rem,2.2vmin,1.5rem)] rounded-3xl border-4 border-gray-200 z-10 w-full max-w-3xl">
+                    <span class="bg-white px-4 md:px-8 py-2 md:py-4 rounded-2xl border-4 border-gray-300 flex flex-col items-center gap-1"><span class="text-[clamp(1.5rem,6vmin,3.75rem)]"><img src="icons/cat.svg" class="emoji-icon" alt=""></span> CAT</span>
+                    <span class="text-gray-300 text-[clamp(1.5rem,6vmin,3.75rem)] rotate-90 md:rotate-0"><img src="icons/arrowright.svg" class="emoji-icon" alt=""></span>
+                    <span class="bg-white px-4 md:px-8 py-2 md:py-4 rounded-2xl border-4 border-gray-300 flex flex-col items-center gap-1"><span class="text-[clamp(1.5rem,6vmin,3.75rem)]"><img src="icons/tophat.svg" class="emoji-icon" alt=""></span> HAT</span>
+                    <div class="w-full text-center mt-1 md:mt-0 md:ml-4">
+                        <span class="text-[clamp(0.75rem,2.4vmin,1.25rem)] text-gray-500 block font-bold">"CAT and HAT are rhyming words."</span>
                     </div>
                 </div>
 
-                <p class="text-[clamp(1.1rem,4vw,1.875rem)] font-bold text-blue-600 bg-blue-50 py-3 md:py-4 px-6 md:px-8 rounded-full border-4 border-blue-200 animate-pulse-glow z-10 text-center">
+                <p class="text-[clamp(0.9rem,3.2vmin,1.875rem)] font-bold text-blue-600 bg-blue-50 py-2 md:py-4 px-5 md:px-8 rounded-full border-4 border-blue-200 animate-pulse-glow z-10 text-center">
                     "Now let's learn more about rhyming words!"
                 </p>
 
-                <div class="absolute bottom-3 right-4 md:bottom-4 md:right-8 text-gray-400 font-bold flex items-center gap-2 animate-bounce text-[clamp(0.7rem,2.5vw,1rem)]">
-                    ➡️ <span class="hidden sm:inline">Transition to Main Lesson</span>
+                <div class="absolute bottom-2 right-3 md:bottom-4 md:right-8 text-gray-400 font-bold flex items-center gap-1.5 animate-bounce text-[clamp(0.6rem,2vmin,1rem)]">
+                    <img src="icons/arrowright.svg" class="emoji-icon" alt=""> <span class="hidden sm:inline">Transition to Main Lesson</span>
                 </div>
             </div>
         </div>
@@ -461,6 +473,13 @@
         const prevBtn = document.getElementById('prev-btn');
         const nextBtn = document.getElementById('next-btn');
         const slideDotsContainer = document.getElementById('slide-dots');
+
+        // Builds a small <img> tag for an icon in icons/<name>.svg, sized via
+        // the 1em .emoji-icon rule so it matches whatever font-size context
+        // it's dropped into.
+        function iconImg(name, alt) {
+            return `<img src="icons/${name}.svg" class="emoji-icon" alt="${alt || ''}">`;
+        }
 
         // Initialize progress dots
         slides.forEach((_, i) => {
@@ -540,55 +559,82 @@
             }
         });
 
-        function revealUaeContent() {
-            const btn = document.getElementById('uae-reveal-btn');
-            const hiddenContent = document.getElementById('uae-hidden-content');
-
+        // Stage 0 -> Stage 1: reveal the word FLAG, the question, and the
+        // "Reveal the Words!" button. The flag itself is never covered.
+        function revealFlagWord() {
             playPopSound();
-
-            // Hide button
+            const btn = document.getElementById('uae-reveal-btn');
             btn.style.opacity = '0';
             btn.style.pointerEvents = 'none';
             setTimeout(() => btn.style.display = 'none', 300);
 
-            // Show content smoothly
-            hiddenContent.style.height = 'auto';
-            hiddenContent.style.opacity = '1';
+            const stage1 = document.getElementById('uae-flag-stage');
+            stage1.style.height = 'auto';
+            stage1.style.opacity = '1';
 
-            // Confetti burst for discovery
             confetti({
-                particleCount: 80,
-                spread: 100,
+                particleCount: 60,
+                spread: 90,
                 origin: { y: 0.6 },
                 colors: ['#ef4444', '#16a34a', '#000000', '#ffffff'] // UAE flag colors roughly
             });
+        }
 
-            // Reveal the rhyming words one by one, 0.75s apart
-            const wordItems = hiddenContent.querySelectorAll('.uae-word-item');
+        // Stage 1 -> Stage 2: reveal the rhyming word examples one by one, 0.75s apart.
+        function revealUaeWords() {
+            playPopSound();
+            const btn2 = document.getElementById('uae-words-btn');
+            btn2.style.opacity = '0';
+            btn2.style.pointerEvents = 'none';
+            setTimeout(() => btn2.style.display = 'none', 300);
+
+            const wordsContainer = document.getElementById('uae-hidden-content');
+            wordsContainer.style.height = 'auto';
+            wordsContainer.style.opacity = '1';
+
+            const wordItems = wordsContainer.querySelectorAll('.uae-word-item');
             wordItems.forEach((item, i) => {
                 setTimeout(() => {
                     item.classList.add('show');
                     playPopSound(0.07);
-                }, 500 + i * 750);
+                }, i * 750);
+            });
+
+            confetti({
+                particleCount: 80,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: ['#ef4444', '#16a34a', '#000000', '#ffffff']
             });
         }
 
         function resetUaeSlide() {
             const btn = document.getElementById('uae-reveal-btn');
-            const hiddenContent = document.getElementById('uae-hidden-content');
-            if (!btn || !hiddenContent) return;
+            const btn2 = document.getElementById('uae-words-btn');
+            const stage1 = document.getElementById('uae-flag-stage');
+            const stage2 = document.getElementById('uae-hidden-content');
+            if (!btn || !stage1 || !stage2) return;
 
             btn.style.display = '';
             btn.style.opacity = '1';
             btn.style.pointerEvents = 'auto';
 
-            hiddenContent.style.opacity = '0';
-            hiddenContent.style.height = '0';
-            hiddenContent.querySelectorAll('.uae-word-item').forEach(item => item.classList.remove('show'));
+            if (btn2) {
+                btn2.style.display = '';
+                btn2.style.opacity = '1';
+                btn2.style.pointerEvents = 'auto';
+            }
+
+            stage1.style.opacity = '0';
+            stage1.style.height = '0';
+
+            stage2.style.opacity = '0';
+            stage2.style.height = '0';
+            stage2.querySelectorAll('.uae-word-item').forEach(item => item.classList.remove('show'));
         }
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
+
         function playTone(freq, type, duration, vol=0.1) {
             if(audioCtx.state === 'suspended') audioCtx.resume();
             const oscillator = audioCtx.createOscillator();
@@ -626,30 +672,31 @@
         }
 
         // Rhyming pairs used by the game — also drives the recap on Slide 8 ("What Did You Notice?")
+        // Each icon (i) is a filename in icons/<name>.svg
         const gameLevels = [
-            { 
-                target: { w: "FAN", i: "🪭" },
-                correct: { w: "PAN", i: "🍳" },
+            {
+                target: { w: "FAN", i: "fan" },
+                correct: { w: "PAN", i: "frying" },
                 wrong: [
-                    { w: "MOP", i: "🧹" }, 
-                    { w: "DOG", i: "🐶" }
-                ] 
+                    { w: "MOP", i: "broom" },
+                    { w: "DOG", i: "dog" }
+                ]
             },
-            { 
-                target: { w: "MOON", i: "🌙" }, 
-                correct: { w: "SPOON", i: "🥄" }, 
+            {
+                target: { w: "MOON", i: "moon" },
+                correct: { w: "SPOON", i: "spoon" },
                 wrong: [
-                    { w: "FISH", i: "🐟" }, 
-                    { w: "CAR", i: "🚗" }
-                ] 
+                    { w: "FISH", i: "fish" },
+                    { w: "CAR", i: "car" }
+                ]
             },
-            { 
-                target: { w: "FOX", i: "🦊" }, 
-                correct: { w: "BOX", i: "📦" }, 
+            {
+                target: { w: "FOX", i: "fox" },
+                correct: { w: "BOX", i: "package" },
                 wrong: [
-                    { w: "TREE", i: "🌳" }, 
-                    { w: "SHIP", i: "🚢" }
-                ] 
+                    { w: "TREE", i: "tree" },
+                    { w: "SHIP", i: "ship" }
+                ]
             }
         ];
 
@@ -665,12 +712,12 @@
             container.innerHTML = '';
             gameLevels.forEach((level, i) => {
                 const row = document.createElement('div');
-                row.className = 'animate-slide-up flex justify-center items-center bg-gray-50 px-4 md:px-8 py-3 md:py-4 rounded-2xl border-4 border-gray-200 gap-3 md:gap-8 flex-wrap';
+                row.className = 'animate-slide-up flex justify-center items-center bg-gray-50 px-3 md:px-8 py-2 md:py-4 rounded-2xl border-4 border-gray-200 gap-2 md:gap-8 flex-wrap';
                 row.style.animationDelay = `${i * 0.15}s`;
                 row.innerHTML = `
-                    <span class="flex items-center gap-2">${level.target.i} ${level.target.w}</span>
+                    <span class="flex items-center gap-2">${iconImg(level.target.i, level.target.w)} ${level.target.w}</span>
                     <span class="text-gray-300">——</span>
-                    <span class="flex items-center gap-2">${level.correct.i} ${level.correct.w}</span>
+                    <span class="flex items-center gap-2">${iconImg(level.correct.i, level.correct.w)} ${level.correct.w}</span>
                 `;
                 container.appendChild(row);
             });
@@ -689,13 +736,13 @@
         function initGame() {
             if(audioCtx.state === 'suspended') audioCtx.resume();
             gameLevelIndex = 0;
-            
+
             // Setup Progress Dots UI
             const progressContainer = document.getElementById('progress-dots');
             progressContainer.innerHTML = '';
             for(let i=0; i<TOTAL_ROUNDS; i++) {
                 const dot = document.createElement('div');
-                dot.className = 'w-5 h-5 rounded-full bg-blue-100 border-2 border-white shadow-inner transition-colors duration-300';
+                dot.className = 'w-4 h-4 md:w-5 md:h-5 rounded-full bg-blue-100 border-2 border-white shadow-inner transition-colors duration-300';
                 dot.id = `game-dot-${i}`;
                 progressContainer.appendChild(dot);
             }
@@ -704,25 +751,25 @@
             document.getElementById('game-start-screen').classList.add('hidden');
             document.getElementById('game-end-screen').classList.add('hidden');
             document.getElementById('game-ui-container').classList.remove('hidden');
-            
+
             loadGameLevel();
         }
 
         function loadGameLevel() {
             isGameAnimating = false;
             const levelData = gameLevels[gameLevelIndex];
-            
+
             // Update UI trackers
             document.getElementById('current-round-display').textContent = gameLevelIndex + 1;
 
             for(let i=0; i<TOTAL_ROUNDS; i++) {
                 const dot = document.getElementById(`game-dot-${i}`);
                 if (i < gameLevelIndex) {
-                    dot.className = 'w-5 h-5 rounded-full bg-green-400 border-2 border-white shadow-inner';
+                    dot.className = 'w-4 h-4 md:w-5 md:h-5 rounded-full bg-green-400 border-2 border-white shadow-inner';
                 } else if (i === gameLevelIndex) {
-                    dot.className = 'w-5 h-5 rounded-full bg-amber-400 border-2 border-white shadow-inner animate-pulse';
+                    dot.className = 'w-4 h-4 md:w-5 md:h-5 rounded-full bg-amber-400 border-2 border-white shadow-inner animate-pulse';
                 } else {
-                    dot.className = 'w-5 h-5 rounded-full bg-blue-100 border-2 border-white shadow-inner';
+                    dot.className = 'w-4 h-4 md:w-5 md:h-5 rounded-full bg-blue-100 border-2 border-white shadow-inner';
                 }
             }
 
@@ -733,19 +780,19 @@
             targetContainer.classList.add('animate-bounce-in');
 
             // Set Target Data
-            document.getElementById('target-icon').textContent = levelData.target.i;
+            document.getElementById('target-icon').innerHTML = iconImg(levelData.target.i, levelData.target.w);
             document.getElementById('target-word').textContent = levelData.target.w;
 
             // Prepare and Shuffle Options
             const options = shuffle([levelData.correct, ...levelData.wrong]);
             const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
-            
+
             // Render Option Cards
             options.forEach((opt, index) => {
                 const wrapper = document.createElement('div');
                 // Responsive layout: full width on mobile, flexible on desktop
-                wrapper.className = 'animate-slide-up w-full md:w-1/3 max-w-[280px] h-32 md:h-48 relative wiggle-container';
+                wrapper.className = 'animate-slide-up w-full md:w-1/3 max-w-[280px] h-24 md:h-48 relative wiggle-container';
                 wrapper.style.animationDelay = `${index * 0.15}s`;
 
                 const btn = document.createElement('div');
@@ -754,14 +801,14 @@
                     'border-sky-400 shadow-[0_8px_0_#38bdf8]',
                     'border-purple-400 shadow-[0_8px_0_#c084fc]'
                 ];
-                
+
                 // Solid, tappable card design
-                btn.className = `game-card bg-white border-4 rounded-2xl md:rounded-3xl p-3 md:p-4 flex flex-row md:flex-col items-center justify-center gap-4 h-full w-full hover-wiggle ${colors[index % colors.length]}`;
+                btn.className = `game-card bg-white border-4 rounded-2xl md:rounded-3xl p-2 md:p-4 flex flex-row md:flex-col items-center justify-center gap-3 md:gap-4 h-full w-full hover-wiggle ${colors[index % colors.length]}`;
                 btn.innerHTML = `
-                    <div class="text-6xl md:text-7xl pointer-events-none drop-shadow-sm">${opt.i}</div>
-                    <div class="text-3xl font-black pointer-events-none uppercase text-gray-700">${opt.w}</div>
+                    <div class="text-[clamp(2.2rem,8vmin,4.5rem)] pointer-events-none drop-shadow-sm">${iconImg(opt.i, opt.w)}</div>
+                    <div class="text-[clamp(1.1rem,4vmin,1.875rem)] font-black pointer-events-none uppercase text-gray-700">${opt.w}</div>
                 `;
-                
+
                 btn.onclick = () => handleGameAnswer(opt, levelData.correct, btn);
                 wrapper.appendChild(btn);
                 optionsContainer.appendChild(wrapper);
@@ -772,10 +819,10 @@
             const rect = element.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
-            
+
             for(let i = 0; i < 8; i++) {
                 const star = document.createElement('div');
-                star.textContent = "⭐";
+                star.innerHTML = iconImg('ministar', '');
                 star.className = 'mini-star';
                 star.style.left = centerX + 'px';
                 star.style.top = centerY + 'px';
@@ -809,7 +856,7 @@
             if (isCorrect) {
                 el.classList.remove('wiggle-container');
                 el.classList.add('answer-correct');
-                mark.textContent = '✅';
+                mark.innerHTML = iconImg('check', 'correct');
                 el.appendChild(mark);
 
                 playSuccessSound();
@@ -825,11 +872,11 @@
                         }
                     });
                 }
+                checkEntryComplete();
             } else {
-                el.classList.remove('hover-wiggle');
                 el.classList.add('answer-wrong', 'animate-shake');
                 el.style.pointerEvents = 'none';
-                mark.textContent = '❌';
+                mark.innerHTML = iconImg('cross', 'wrong');
                 el.appendChild(mark);
 
                 playFailSound();
@@ -837,18 +884,46 @@
             }
         }
 
+        // Shows the reset button once both entry-ticket questions have been answered correctly.
+        function checkEntryComplete() {
+            const questions = document.querySelectorAll('.entry-question');
+            const allDone = Array.from(questions).every(q => {
+                const correctOpt = q.querySelector('.entry-option[data-correct="true"]');
+                return correctOpt && correctOpt.dataset.answered === 'true';
+            });
+            if (allDone) {
+                const resetBtn = document.getElementById('entry-reset-btn');
+                if (resetBtn) resetBtn.classList.remove('hidden');
+            }
+        }
+
+        function resetEntryTicket() {
+            playPopSound();
+            document.querySelectorAll('.entry-option').forEach(el => {
+                delete el.dataset.answered;
+                el.classList.remove('answer-correct', 'answer-wrong', 'animate-shake');
+                el.classList.add('wiggle-container', 'border-gray-200');
+                el.style.pointerEvents = '';
+                el.style.opacity = '';
+                const mark = el.querySelector('.answer-mark');
+                if (mark) mark.remove();
+            });
+            const resetBtn = document.getElementById('entry-reset-btn');
+            if (resetBtn) resetBtn.classList.add('hidden');
+        }
+
         function markWrongElement(element) {
             element.style.pointerEvents = 'none'; // Prevent clicking again
-            
+
             // Visual shake feedback
             element.classList.add('animate-shake');
             element.classList.remove('hover-wiggle'); // Disable wiggle on hover
-            
+
             // Override styles to look disabled and incorrect
             element.classList.remove('bg-white', 'border-pink-400', 'border-sky-400', 'border-purple-400');
             element.classList.add('bg-red-50', 'border-red-400', 'relative');
             element.style.boxShadow = 'none'; // Flatten the card
-            
+
             // Dim existing content (icon and text)
             Array.from(element.children).forEach(child => {
                 child.style.opacity = '0.3';
@@ -857,8 +932,8 @@
 
             // Add bouncing Cross Mark overlay
             const cross = document.createElement('div');
-            cross.className = 'absolute inset-0 flex items-center justify-center text-7xl md:text-8xl z-50 animate-bounce-in drop-shadow-md';
-            cross.innerHTML = '❌';
+            cross.className = 'absolute inset-0 flex items-center justify-center text-[clamp(2.5rem,10vmin,5.5rem)] z-50 animate-bounce-in drop-shadow-md';
+            cross.innerHTML = iconImg('cross', 'wrong');
             element.appendChild(cross);
         }
 
@@ -871,16 +946,16 @@
                 playSuccessSound();
 
                 // Stylize correct button
-                btnElement.className = `game-card border-4 border-green-500 rounded-2xl md:rounded-3xl p-3 md:p-4 flex flex-row md:flex-col items-center justify-center gap-4 h-full w-full bg-green-100 text-green-900 shadow-[0_0px_0_#22c55e]`;
+                btnElement.className = `game-card border-4 border-green-500 rounded-2xl md:rounded-3xl p-2 md:p-4 flex flex-row md:flex-col items-center justify-center gap-3 md:gap-4 h-full w-full bg-green-100 text-green-900 shadow-[0_0px_0_#22c55e]`;
                 btnElement.style.transform = 'scale(1.05) rotate(2deg)';
                 btnElement.style.zIndex = '50';
 
                 // Effects
                 createLocalBurst(btnElement);
-                confetti({ 
-                    particleCount: 150, 
-                    spread: 80, 
-                    origin: { y: 0.6 }, 
+                confetti({
+                    particleCount: 150,
+                    spread: 80,
+                    origin: { y: 0.6 },
                     zIndex: 10000,
                     colors: ['#22c55e', '#facc15', '#3b82f6', '#f472b6']
                 });
@@ -907,7 +982,7 @@
             const endScreen = document.getElementById('game-end-screen');
             endScreen.classList.remove('hidden');
             playWinGameSound();
-            
+
             // Continuous confetti for win screen
             const duration = 3000;
             const end = Date.now() + duration;
@@ -930,14 +1005,14 @@
 
         document.addEventListener('mousemove', function(e) {
             // Throttle generation slightly so it's not overwhelming, but frequent enough to make a trail
-            if(Math.random() > 0.4) return; 
-            
+            if(Math.random() > 0.4) return;
+
             const sparkle = document.createElement('div');
             sparkle.className = 'sparkle';
             // Offset slightly so it drops from the tip of the cursor
             sparkle.style.left = (e.pageX + 5) + 'px';
             sparkle.style.top = (e.pageY + 5) + 'px';
-            
+
             // Pastel/Gold color palette
             const colors = ['#fde047', '#fef08a', '#ffedd5', '#fef3c7', '#ffffff'];
             const color = colors[Math.floor(Math.random() * colors.length)];
@@ -945,7 +1020,7 @@
             sparkle.style.boxShadow = `0 0 10px ${color}, 0 0 20px white`;
 
             document.body.appendChild(sparkle);
-            
+
             // Remove from DOM after animation completes
             setTimeout(() => sparkle.remove(), 800);
         });
