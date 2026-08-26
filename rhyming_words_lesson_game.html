@@ -293,6 +293,10 @@
         </div>
 
         <div class="slide" id="slide-1">
+            <div class="pdf-theme-card border-gray-300"></div>
+        </div>
+
+        <div class="slide" id="slide-2">
             <div class="pdf-theme-card border-green-400">
                 <div class="absolute top-6 left-6 text-[clamp(1.6rem,5.5vmin,3.5rem)] opacity-30 animate-float pointer-events-none"><img src="icons/pencil.svg" class="emoji-icon" alt=""></div>
                 <div class="absolute bottom-6 right-6 text-[clamp(1.6rem,5.5vmin,3.5rem)] opacity-30 animate-float pointer-events-none" style="animation-delay: 1.2s;"><img src="icons/openbook.svg" class="emoji-icon" alt=""></div>
@@ -309,7 +313,7 @@
             </div>
         </div>
 
-        <div class="slide" id="slide-2">
+        <div class="slide" id="slide-3">
             <div class="pdf-theme-card border-pink-400 p-3 md:p-6 scroll-content">
                 <div class="section-badge text-[clamp(0.8rem,2.6vmin,1.5rem)] text-pink-600 bg-pink-100 border-pink-300 mb-[clamp(0.6rem,2vmin,1.5rem)]"><img src="icons/ticket.svg" class="emoji-icon" alt=""> Entry Ticket: "Find My Friend"</div>
 
@@ -363,7 +367,7 @@
             </div>
         </div>
 
-        <div class="slide" id="slide-3">
+        <div class="slide" id="slide-4">
             <div class="pdf-theme-card border-purple-400 overflow-hidden relative">
                 <div class="section-badge text-[clamp(0.75rem,2.4vmin,1.5rem)] text-purple-700 bg-purple-100 border-purple-300 absolute top-[clamp(0.4rem,1.5vmin,1.5rem)] z-50"><img src="icons/puzzle.svg" class="emoji-icon" alt=""> Hands-on: Find Your Word Friend!</div>
 
@@ -379,7 +383,7 @@
             </div>
         </div>
 
-        <div class="slide" id="slide-4">
+        <div class="slide" id="slide-5">
             <div class="pdf-theme-card border-yellow-400">
                 <div class="absolute top-4 right-4 text-[clamp(1.4rem,4.5vmin,3rem)] opacity-40 animate-float pointer-events-none"><img src="icons/notes.svg" class="emoji-icon" alt=""></div>
                 <h2 class="section-badge text-[clamp(0.95rem,3.2vmin,1.875rem)] text-yellow-600 bg-yellow-50 border-yellow-300 mb-[clamp(0.75rem,3vmin,2rem)]"><img src="icons/note.svg" class="emoji-icon" alt=""> "Cat, Cat, Wear a Hat!"</h2>
@@ -394,7 +398,7 @@
             </div>
         </div>
 
-        <div class="slide" id="slide-5">
+        <div class="slide" id="slide-6">
             <div class="pdf-theme-card border-red-500">
                 <div class="section-badge text-[clamp(0.75rem,2.4vmin,1.5rem)] text-gray-800 bg-white border-red-300 mb-[clamp(0.5rem,2vmin,1.5rem)]"><img src="icons/flag_uae.svg" class="emoji-icon" alt=""> UAE Connection: "Look Around Our UAE!"</div>
 
@@ -428,7 +432,7 @@
             </div>
         </div>
 
-        <div class="slide p-0 md:p-4" id="slide-6">
+        <div class="slide p-0 md:p-4" id="slide-7">
             <div class="pdf-theme-card border-blue-500 overflow-hidden !p-0">
 
                 <div class="absolute top-2 left-2 md:top-4 md:left-4 bg-white px-2.5 md:px-4 py-1 md:py-2 rounded-full font-bold text-blue-600 shadow-md z-30 flex items-center gap-1 md:gap-2 border-2 border-blue-200 text-[clamp(0.6rem,1.8vmin,0.95rem)]">
@@ -490,7 +494,7 @@
             </div>
         </div>
 
-        <div class="slide" id="slide-7">
+        <div class="slide" id="slide-8">
             <div class="pdf-theme-card border-purple-400 scroll-content">
                 <div class="section-badge text-[clamp(0.9rem,3.2vmin,1.875rem)] text-purple-700 bg-purple-100 border-purple-300 mb-[clamp(0.6rem,2.4vmin,2.5rem)]">
                     <span class="text-[clamp(1.2rem,4.2vmin,2.25rem)]"><img src="icons/ear.svg" class="emoji-icon" alt=""></span> What Did You Notice?
@@ -506,7 +510,7 @@
             </div>
         </div>
 
-        <div class="slide" id="slide-8">
+        <div class="slide" id="slide-9">
             <div class="pdf-theme-card border-pink-400 justify-center scroll-content">
 
                 <!-- Decorative background elements -->
@@ -549,7 +553,7 @@
         let currentSlide = 0;
         let lastRenderedSlide = -1;
         const slides = document.querySelectorAll('.slide');
-        const UAE_SLIDE_INDEX = Array.from(slides).findIndex(s => s.id === 'slide-5');
+        const UAE_SLIDE_INDEX = Array.from(slides).findIndex(s => s.id === 'slide-6');
         const prevBtn = document.getElementById('prev-btn');
         const nextBtn = document.getElementById('next-btn');
         const slideDotsContainer = document.getElementById('slide-dots');
@@ -603,7 +607,7 @@
             }
             lastRenderedSlide = currentSlide;
 
-            if (activeSlide.id === 'slide-7') {
+            if (activeSlide.id === 'slide-8') {
                 renderNoticeMatches();
             }
         }
